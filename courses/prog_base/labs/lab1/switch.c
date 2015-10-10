@@ -8,6 +8,7 @@ int exec(int op, int a, int b) {
 		c = a;
 		a = b;
 		b = a;
+		op = fabs(op);
 	}
 	switch (op) {
 	case 0:
