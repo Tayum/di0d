@@ -34,7 +34,7 @@ double long2double(long long LongNumber) {
 		return -INFINITY;
 	}
 	if (Exponent == 2047 && Fraction == 0 && Sign == 0) {
-		return -INFINITY;
+		return INFINITY;
 	}
 	if (Exponent == 0 && Fraction == 0 && Sign == 1) {
 		return -0;
