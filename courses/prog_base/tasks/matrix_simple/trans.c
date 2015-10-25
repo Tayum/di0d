@@ -4,7 +4,8 @@
 #include <time.h>
 
 void assignment(int FirstMatrix[4][4], int SecondMatrix[4][4]) {
-	int n, i, j = 4;
+	int i, j;
+	int n = 4;
 	for (i = 0; i < n; i++)
 	{
 		for (j = 0; j < n; j++)
@@ -15,7 +16,8 @@ void assignment(int FirstMatrix[4][4], int SecondMatrix[4][4]) {
 }
 
 void fillRand(int mat[4][4]) {
-	int n, i, j = 4;
+	int i, j;
+	int n = 4;
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
 			mat[i][j] = rand() % 1000 * pow(-1, rand());
@@ -24,7 +26,8 @@ void fillRand(int mat[4][4]) {
 }
 
 void rotateCCW270(int mat[4][4]) {
-	int n, i, j = 4;
+	int i, j;
+	int n = 4;
 	int MatrixRotate[4][4];
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
@@ -35,7 +38,8 @@ void rotateCCW270(int mat[4][4]) {
 }
 
 void flipV(int mat[4][4]) {
-	int n, i, j = 4;
+	int i, j = 4;
+	int n = 4;
 	int MatrixFlip[4][4];
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
@@ -46,7 +50,8 @@ void flipV(int mat[4][4]) {
 }
 
 void transposSide(int mat[4][4]) {
-	int n, i, j = 4;
+	int i, j = 4;
+	int n = 4;
 	int MatrixTranspos[4][4];
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
