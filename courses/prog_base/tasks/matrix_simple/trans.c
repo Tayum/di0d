@@ -5,10 +5,9 @@
 
 void fillRand(int mat[4][4]) {
 	int i, j;
-	srand(time(0));
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < 4; j++) {
-			mat[i][j] = rand(5) % 1000 * pow(-1, rand(25));
+			mat[i][j] = rand() % 1000 * pow(-1, rand());
 		}
 	}
 }
