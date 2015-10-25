@@ -27,7 +27,7 @@ void rotateCCW270(int mat[4][4]) {
 	int n, i, j = 4;
 	int MatrixRotate[4][4];
 	for (i = 0; i < n; i++) {
-		for (j = 0; j < n; i++) {
+		for (j = 0; j < n; j++) {
 			MatrixRotate[i][j] = mat[3 - j][i];
 		}
 	}
@@ -48,7 +48,7 @@ void flipV(int mat[4][4]) {
 void transposSide(int mat[4][4]) {
 	int n, i, j = 4;
 	int MatrixTranspos[4][4];
-	for (i = 0; i < n; j++) {
+	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
 			MatrixTranspos[i][j] = mat[3 - j][3 - i];
 		}
