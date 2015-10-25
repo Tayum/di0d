@@ -3,53 +3,55 @@
 #include <stdio.h>
 #include <time.h>
 
+void assignment(int FirstMatrix[4][4], int SecondMatrix[4][4]) {
+	int n, i, j = 4;
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			SecondMatrix[i][j] = FirstMatrix[i][j];
+		}
+	}
+}
+
 void fillRand(int mat[4][4]) {
-	int i, j;
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
+	int n, i, j = 4;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
 			mat[i][j] = rand() % 1000 * pow(-1, rand());
 		}
 	}
 }
 
 void rotateCCW270(int mat[4][4]) {
-	int i, j, MatrixRotate[4][4];
-	for (j = 0; j < 4; j++) {
-		for (i = 3; i >= 0; i--) {
-			MatrixRotate[i][j] = mat[i][j];
+	int n, i, j = 4;
+	int MatrixRotate[4][4];
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; i++) {
+			MatrixRotate[i][j] = mat[3 - j][i];
 		}
 	}
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			mat[i][j] = MatrixRotate[i][j];
-		}
-	}
+	assignment(MatrixRotate, mat);
 }
 
 void flipV(int mat[4][4]) {
-	int i, j, MatrixFlip[4][4];
-	for (i = 3; i >= 0; i--) {
-		for (j = 0; j < 4; j++) {
-			MatrixFlip[i][j] = mat[i][j];
+	int n, i, j = 4;
+	int MatrixFlip[4][4];
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
+			MatrixFlip[i][j] = mat[3 - i][j];
 		}
 	}
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			mat[i][j] = MatrixFlip[i][j];
-		}
-	}
+	assignment(MatrixFlip, mat);
 }
 
 void transposSide(int mat[4][4]) {
-	int i, j, MatrixTranspos[4][4];
-	for (j = 3; j >= 0; j--) {
-		for (i = 3; i >= 0; i--) {
-			MatrixTranspos[i][j] = mat[i][j];
+	int n, i, j = 4;
+	int MatrixTranspos[4][4];
+	for (i = 0; i < n; j++) {
+		for (j = 0; j < n; j++) {
+			MatrixTranspos[i][j] = mat[3 - j][3 - i];
 		}
 	}
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			mat[i][j] = MatrixTranspos[i][j];
-		}
-	}
+	assignment(MatrixTranspos, mat);
 }
