@@ -8,9 +8,9 @@ void drawDown(int CoordY, int maxY, int colorCheck);
 void drawUp(int CoordY, int maxY, int colorCheck);
 
 int main(void) {
-	consHndlr = GetStdHandle(STD_OUTPUT_HANDLE);
 	int CoordX = 0, CoordY = 0;
 	int checkX = 0;
+	consHndlr = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (checkX < 40) {
 		CurrPos.X = CoordX;
 		drawDown(CoordY, 24, checkX);
