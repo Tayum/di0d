@@ -5,10 +5,11 @@
 
 double calc(int n, int m) {
 	double x=0;
-	int i,j;
+	double i;
+	int j;
 	for (i = 1; i <= n; i++) {
 		for (j = 1; j <= m; j++) {
-			x = x + cos(M_PI / i)*(i / (j + 1));
+			x = x + cos(M_PI / i)*i / (j + 1);
 		}
 	}
 	return x;
