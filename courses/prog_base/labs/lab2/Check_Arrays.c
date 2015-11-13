@@ -5,7 +5,9 @@
 
 void fillRand3(int arr[], int size);
 int checkRand3(int arr[], int size);
+float meanValue(int arr[], int size);
 int maxValue(int arr[], int size);
+int meanIndex(int arr[], int size);
 int maxIndex(int arr[], int size);
 int maxOccurance(int arr[], int size);
 int diff(int arr1[], int arr2[], int res[], int size);
@@ -18,6 +20,7 @@ int main(void) {
 	int arr[12];
 	int arr2[12];
 	int res[12];
+	int size = 12;
 	int i;
 	int check;
 	fillRand3(arr, 12);
@@ -25,35 +28,40 @@ int main(void) {
 		printf("%d ", arr[i]);
 	}
 	puts("- First randomly generated array\n");
-	check = checkRand3(arr, 12);
+	check = checkRand3(arr, size);
 	printf("%d", check);
 	puts(" - Is is really consist of only [0..1]\n");
-	check = maxValue(arr, 12);
+	printf("%.10f", meanValue(arr, size));
+	puts(" - Average value of the array\n");
+	check = maxValue(arr, size);
 	printf("%d", check);
 	puts(" - Maximal element of the array\n");
-	check = maxIndex(arr, 12);
+	check = meanIndex(arr, size);
+	printf("%d", check);
+	puts(" - Index of the first element most close to the average value\n");
+	check = maxIndex(arr, size);
 	printf("%d", check);
 	puts(" - Index of the first maximal number\n");
-	check = maxOccurance(arr, 12);
+	check = maxOccurance(arr, size);
 	printf("%d", check);
 	puts(" - The most occurable element of the array\n");
-	fillRand3(arr2, 12);
+	fillRand3(arr2, size);
 	for (i = 0; i < 12; i++) {
 		printf("%d ", arr2[i]);
 	}
 	puts("- Second randomly generated array\n");
-	check = diff(arr, arr2, res, 12);
+	check = diff(arr, arr2, res, size);
 	printf("%d", check);
 	puts(" - Is it different from the first one or not\n");
-	sub(arr, arr2, res, 12);
+	sub(arr, arr2, res, size);
 	for (i = 0; i < 12; i++) {
 		printf("%d ", res[i]);
 	}
 	puts("- Result array consisting of arr[i]-arr2[i]\n");
-	check = eq(arr, arr2, 12);
+	check = eq(arr, arr2, size);
 	printf("%d", check);
 	puts(" - Whether arrays are equal or not\n");
-	lor(arr, arr2, res, 12);
+	lor(arr, arr2, res, size);
 	for (i = 0; i < 12; i++) {
 		printf("%d ", res[i]);
 	}
@@ -80,6 +88,16 @@ int checkRand3(int arr[], int size) {
 	return check;
 }
 
+float meanValue(int arr[], int size) {
+	int i;
+	float avg = 0;
+	for (i = 0; i < size; i++) {
+		avg = avg + arr[i];
+	}
+	avg = avg / size;
+	return avg;
+}
+
 int maxValue(int arr[], int size) {
 	int i;
 	int max = arr[0];
@@ -89,6 +107,31 @@ int maxValue(int arr[], int size) {
 		}
 	}
 	return max;
+}
+
+int meanIndex(int arr[], int size) {
+	int i;
+	float avg = 0;
+	int index;
+	for (i = 0; i < size; i++) {
+		avg = avg + arr[i];
+	}
+	avg = avg / size;
+	if (avg >= 0.5) {
+		for (i = size - 1; i >= 0; i--) {
+			if (arr[i] == 1) {
+				index = i;
+			}
+		}
+	}
+	else {
+		for (i = size - 1; i >= 0; i--) {
+			if (arr[i] == 0) {
+				index = i;
+			}
+		}
+	}
+	return index;
 }
 
 int maxIndex(int arr[], int size) {

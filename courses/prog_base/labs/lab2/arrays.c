@@ -22,6 +22,16 @@ int checkRand3(int arr[], int size) {
 	return check;
 }
 
+float meanValue(int arr[], int size) {
+	int i;
+	float avg=0;
+	for (i = 0; i < size; i++) {
+		avg = avg + arr[i];
+	}
+	avg = avg / size;
+	return avg;
+}
+
 int maxValue(int arr[], int size) {
 	int i;
 	int max = arr[0];
@@ -31,6 +41,31 @@ int maxValue(int arr[], int size) {
 		}
 	}
 	return max;
+}
+
+int meanIndex(int arr[], int size) {
+	int i;
+	float avg = 0;
+	int index;
+	for (i = 0; i < size; i++) {
+		avg = avg + arr[i];
+	}
+	avg = avg / size;
+	if (avg >= 0.5) {
+		for (i = size - 1; i >= 0; i--) {
+			if (arr[i] == 1) {
+				index = i;
+			}
+		}
+	}
+	else {
+		for (i = size - 1; i >= 0; i--) {
+			if (arr[i] == 0) {
+				index = i;
+			}
+		}
+	}
+	return index;
 }
 
 int maxIndex(int arr[], int size) {
