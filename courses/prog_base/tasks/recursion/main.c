@@ -42,7 +42,7 @@ int firstEl(int index, char string[], int size) {
 }
 
 int lastEl(int index, char string[], int size) {
-	if (index == 0) {
+	if (index == -1) {
 		return -1;
 	}
 	else if (isxdigit(string[index]) != 0) {
