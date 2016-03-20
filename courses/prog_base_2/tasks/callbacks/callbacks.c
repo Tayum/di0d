@@ -1,41 +1,44 @@
-/*Im really sorry, Ruslan Anatolievich, I was not able to complete my task properly until deadline. But I'm very close
+/*22:01:Im really sorry, Ruslan Anatolievich, I was not able to complete my task properly until deadline. But I'm very close
 as far as you may see from this code. I will end with this as soon as possible, just, if you can, give me like 2 hours
 (at maximum)
-Thanks :P*/
+Thanks :P
+UPD 23:21: Everything is working fine I guess, updating code on GitHub.*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 
-typedef void (* intCB)(int);
-typedef void (* doubleCB)(float);
+typedef void(*intCB)(int);
+typedef void(*doubleCB)(float, float *);
 
-void isNumber(const char * textLine[], int size, intCB intNum, doubleCB floatNum);
+void procSequence(const char * textLine[], int size, float * floatSum, intCB intNum, doubleCB floatNum);
 void intFunc(int intNum);
-void floatFunc(float floatNum);
+void floatFunc(float floatNum, float * floatSum);
 
 int main(void) {
-	char * words [] = { "hello", "5.323", "5", "5.000", "0.00", "0.323"};
+	float floatSum = 0;
+	char * words[] = { "hello", "5.323", "5", "5.000", "0.00", "0.323", "0.323" };
 	int length = sizeof(words) / sizeof(words[0]);
 	intCB intNum = intFunc;
 	doubleCB floatNum = floatFunc;
-	isNumber(words, length, intNum, floatNum);
+	procSequence(words, length, &floatSum, intNum, floatNum);
 	getch();
 	return 0;
 }
 
-void isNumber(const char * textLine[], int size, intCB intNum, doubleCB floatNum) {
-	int intNumberNew;
-	float floatNumberNew;
-	float floatSum=0;
-	for (int i = 0; i < size; i++) {
-		intNumberNew = atoi(textLine[i]);
-		floatNumberNew = atof(textLine[i]);
-		if (intNumberNew == floatNumberNew && intNumberNew != 0) {
-			intNum(intNumberNew);
+void procSequence(const char * textLine[], int size, float * floatSum, intCB intNum, doubleCB floatNum) {
+	int i;
+	int intNumber;
+	float floatNumber;
+	for (i = 0; i < size; i++) {
+		printf("=====String to work with=====\n'%s'\n=============================\n", textLine[i]);
+		intNumber = atoi(textLine[i]);
+		floatNumber = atof(textLine[i]);
+		if (intNumber == floatNumber && intNumber != 0) {
+			intNum(intNumber);
 		}
-		else if (floatNumberNew != 0) {
-			floatNum(floatNumberNew);
+		else if (floatNumber != 0) {
+			floatNum(floatNumber, floatSum);
 		}
 		else {
 			puts("");
@@ -43,13 +46,18 @@ void isNumber(const char * textLine[], int size, intCB intNum, doubleCB floatNum
 			puts("");
 		}
 	}
-	return 0;
 }
 
 void intFunc(int intNum) {
-	printf("int num: %i\n", intNum);
+	puts("");
+	printf("New added int num: %i\n", intNum);
+	puts("");
 }
 
-void floatFunc(float floatNum) {
-	printf("float num: %f\n", floatNum);
+void floatFunc(float floatNum, float * floatSum) {
+	(*floatSum) += floatNum;
+	puts("");
+	printf("New added float num: %f\n", floatNum);
+	printf("Sum now: %f\n", *floatSum);
+	puts("");
 }
