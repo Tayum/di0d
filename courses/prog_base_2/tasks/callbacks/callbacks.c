@@ -1,9 +1,3 @@
-/*22:01:Im really sorry, Ruslan Anatolievich, I was not able to complete my task properly until deadline. But I'm very close
-as far as you may see from this code. I will end with this as soon as possible, just, if you can, give me like 2 hours
-(at maximum)
-Thanks :P
-UPD 23:21: Everything is working fine I guess, updating code on GitHub.*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -14,14 +8,24 @@ typedef void(*doubleCB)(float, float *);
 void procSequence(const char * textLine[], int size, float * floatSum, intCB intNum, doubleCB floatNum);
 void intFunc(int intNum);
 void floatFunc(float floatNum, float * floatSum);
+//TWO NEW-ADDED FUNCTIONS
+void intFuncTwo(int intNum);
+void floatFuncTwo(float floatNum, float * floatSum);
 
 int main(void) {
 	float floatSum = 0;
-	char * words[] = { "hello", "5.323", "5", "5.000", "0.00", "0.323", "0.323" };
+	char * words[] = { "hello", "5.323", "5", "0.00", "0.666" };
 	int length = sizeof(words) / sizeof(words[0]);
 	intCB intNum = intFunc;
 	doubleCB floatNum = floatFunc;
 	procSequence(words, length, &floatSum, intNum, floatNum);
+	//"alternative" case:
+	puts("\n=============ANOTHER CASE=============\n");
+	floatSum = 0;
+	intNum = intFuncTwo;
+	floatNum = floatFuncTwo;
+	procSequence(words, length, &floatSum, intNum, floatNum);
+	//END of "alternative" case
 	getch();
 	return 0;
 }
@@ -59,5 +63,22 @@ void floatFunc(float floatNum, float * floatSum) {
 	puts("");
 	printf("New added float num: %f\n", floatNum);
 	printf("Sum now: %f\n", *floatSum);
+	puts("");
+}
+
+//TWO NEW-ADDED FUNCTIONS, SIMILAR (but not the same!) TO THOSE ABOVE: is that the "alternative" you meant?
+void intFuncTwo(int intNum) {
+	puts("");
+	puts("Okay, there we go, I do similar things but I'm not the function that you used!");
+	printf("I added new int num: %i\n", intNum);
+	puts("");
+}
+
+void floatFuncTwo(float floatNum, float * floatSum) {
+	(*floatSum) += floatNum;
+	puts("");
+	puts("Okay, there we go, I do similar things but I'm not the function that you used!");
+	printf("I added new float num: %f\n", floatNum);
+	printf("And the sum now is next: %f\n", *floatSum);
 	puts("");
 }
