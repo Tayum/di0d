@@ -22,21 +22,3 @@ void reader_wait(const reader_t * self);
 void * readerFunc(void *args);
 
 #endif //WRITER_H_INCLUDED
-
-/*#ifndef WRITER_H_INCLUDED
-#define WRITER_H_INCLUDED
-
-#include "mutex.h"
-
-struct string_s {
-	char * string;
-	mutex_t * myMutex;
-	int index;
-};
-
-typedef struct string_s string_t;
-
-void * writerFunc(void *args);
-void * readerFunc(void *args);
-
-#endif //WRITER_H_INCLUDED*/
