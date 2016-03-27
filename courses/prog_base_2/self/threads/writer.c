@@ -1,28 +1,130 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
-#include <string.h>
 #include <conio.h>
+#include <string.h>
 
-#include "logic.h"
+#include "thread.h"
+#include "mutex.h"
 
+#include "writer.h"
 
-//printf("This char: %c", (ptr)[ind]);  -- TRASH
+//shared_data module
+struct string_s {
+	char * string;
+	mutex_t * myMutex;
+	int index;
+};
+
+string_t * string_new(char * smpString) {
+	string_t * stringSample = malloc(sizeof(struct string_s));
+	stringSample->string = smpString;
+	stringSample->myMutex = mutex_new();
+	stringSample->index = -1;
+	return stringSample;
+}
+
+void string_free(string_t * self) {
+	mutex_free(self->myMutex);
+	free(self);
+}
+
+char * string_getString(char * resultStr, const string_t * self) {
+		strcpy(resultStr, self->string);
+	return resultStr;
+}
+
+//writer module
+writer_t * writer_new(string_t * self) {
+	thread_t * writerSample = thread_create_args(writerFunc, self);
+	return writerSample;
+}
+
+void writer_free(writer_t * self) {
+	thread_free(self);
+}
+
+void writer_wait(const writer_t * self) {
+	thread_join(self);
+}
+
 void * writerFunc(void *args) {
 	string_t * stringStrc = (string_t *)args;
-	stringStrc->index = -1;
 	int length = strlen(stringStrc->string);
 	while (1) {
 		mutex_lock(stringStrc->myMutex);
 		(stringStrc->index)++;
 		if ((stringStrc->index) == length) {
 			(stringStrc->index) = (stringStrc->index) % length;
-			puts("\nThe end of the string is reached. Start checking again...");
-			//Sleep(3000);
+			puts("\nThe end of the string is reached. Start checking again in 3 seconds...");
+			Sleep(3000);
 		}
-		//fflush(stdout);
+		if (kbhit()) {
+			break;
+		}
+		Sleep(30);
 		mutex_unlock(stringStrc->myMutex);
-		Sleep(100);
+	}
+	return (NULL);
+}
+
+//reader module
+reader_t * reader_new(string_t * self) {
+	thread_t * readerSample = thread_create_args(readerFunc, self);
+	return readerSample;
+}
+
+void reader_free(reader_t * self) {
+	thread_free(self);
+}
+
+void reader_wait(const reader_t * self) {
+	thread_join(self);
+}
+
+void * readerFunc(void *args) {
+	string_t * stringStrc = (string_t *)args;
+	while (1) {
+		mutex_lock(stringStrc->myMutex);
+		if (stringStrc->string[stringStrc->index] == 'a' || stringStrc->string[stringStrc->index] == 'A' || stringStrc->string[stringStrc->index] == 'e' || stringStrc->string[stringStrc->index] == 'E' || stringStrc->string[stringStrc->index] == 'i' || stringStrc->string[stringStrc->index] == 'I' || stringStrc->string[stringStrc->index] == 'o' || stringStrc->string[stringStrc->index] == 'O' || stringStrc->string[stringStrc->index] == 'u' || stringStrc->string[stringStrc->index] == 'U') {
+			printf("%c", stringStrc->string[stringStrc->index]);
+		}
+		if (kbhit()) {
+			break;
+		}
+		Sleep(30);
+		mutex_unlock(stringStrc->myMutex);
+	}
+	return (NULL);
+}
+
+/*#include <stdlib.h>
+#include <stdio.h>
+#include <windows.h>
+#include <conio.h>
+#include <string.h>
+
+#include "writer.h"
+
+void * writerFunc(void *args) {
+	string_t * stringStrc = (string_t *)args;
+	int length = strlen(stringStrc->string);
+	while (1) {
+		mutex_lock(stringStrc->myMutex);
+		(stringStrc->index)++;
+		if ((stringStrc->index) == length) {
+			(stringStrc->index) = (stringStrc->index) % length;
+			puts("\nThe end of the string is reached. Start checking again in 3 seconds...");
+			Sleep(3000);
+		}
+		//when you press ANY KEY - the threads are closed
+		if (kbhit()) {
+			break;
+		}
+		//END OF closing threads
+		Sleep(30);	// -- correct behaviour of the program (if goes before mutex_unlock)
+		mutex_unlock(stringStrc->myMutex);
+		//Sleep(100); -- incorrect behaviour of the program (if goes after mutex_unlock)
 	}
 	return (NULL);
 }
@@ -34,70 +136,14 @@ void * readerFunc(void *args) {
 		if (stringStrc->string[stringStrc->index] == 'a' || stringStrc->string[stringStrc->index] == 'A' || stringStrc->string[stringStrc->index] == 'e' || stringStrc->string[stringStrc->index] == 'E' || stringStrc->string[stringStrc->index] == 'i' || stringStrc->string[stringStrc->index] == 'I' || stringStrc->string[stringStrc->index] == 'o' || stringStrc->string[stringStrc->index] == 'O' || stringStrc->string[stringStrc->index] == 'u' || stringStrc->string[stringStrc->index] == 'U') {
 			printf("%c", stringStrc->string[stringStrc->index]);
 		}
-		mutex_unlock(stringStrc->myMutex);
-		Sleep(100);
-	}
-	return (NULL);
-}
-
-
-/*#include <windows.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <conio.h>
-#include "logic.h"
-
-// private:
-bool _checkAscending(unsigned *arr)
-{
-	for (int i = 0; i < SHARED_ARR_SIZE - 1; i++)
-	{
-		if (arr[i] >= arr[i + 1])
-			return (false);
-	}
-	return (true);
-}
-
-// public:
-void *producerFunc(void *args)
-{
-	sharedObj_t *shObj = (sharedObj_t *)args;
-	time_t t;
-	srand((unsigned)time(&t));
-	int index = 0;
-	while (TRUE)
-	{
-		mutex_lock(shObj->mu);
-		shObj->arr[index] = rand() % 10;
-		index++;
-		index %= 4;
-		system("cls");
-		printf("Array: %4i%4i%4i%4i\n", shObj->arr[0], shObj->arr[1], shObj->arr[2], shObj->arr[3]);
-		printf("A process can take a while...\n\n");
-		fflush(stdout);
-		mutex_unlock(shObj->mu);
-		Sleep(SLEEP_TIME);
-	}
-	return (NULL);
-}
-
-void *consumerFunc(void *args)
-{
-	sharedObj_t *shObj = (sharedObj_t *)args;
-	while (TRUE)
-	{
-		mutex_lock(shObj->mu);
-		if (_checkAscending(shObj->arr))
-		{
-			puts("Array in ascending order!\n"
-				"See you later!\n"
-				"Wait +-2 seconds.");
-			Sleep(2000);
+		//when you press ANY KEY - the threads are closed
+		if (kbhit()) {
+			break;
 		}
-		mutex_unlock(shObj->mu);
-		Sleep(SLEEP_TIME);
+		//END OF closing threads
+		Sleep(30); //correct behaviour of the program (if goes before mutex_unlock)
+		mutex_unlock(stringStrc->myMutex);
+		//Sleep(100); -- incorrect behaviour of the program (if goes after mutex_unlock)
 	}
 	return (NULL);
 }*/
