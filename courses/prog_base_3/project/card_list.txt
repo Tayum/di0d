@@ -1,0 +1,67 @@
+/* THIS IS THE CARD-LIST THAT PLANNED TO BE ADDED TO THE GAME. THEY ARE SORTED IN THE ADDING COMPLEXITY */
+
+==========BASIC CARDS (for mage)==========
+Fireball (4) (Deal 6 damage.)
+Arcane Intellect (3) (Draw 2 cards.)
+Arcane Explosion (2) (Deal 1 damage to all enemy minions.)
+Flamestrike (7) (Deal 4 damage to all enemy minions.)
+Arcane Missiles (1) (Deal 3 damage randomly split among all enemies.)
+Mirror Image (1) (Summon two 0/2 minions with Taunt.)
+Polymorph (4) (Transform a minion into a 1/1 Sheep.)
+Frost bolt (2) (Deal 3 damage to a character and Freeze it.)
+Frost Nova (3) (Freeze all enemy minions.)
+Water Elemental (4) (Freeze any character damaged by this minion.)
+
+==========BASIC CARDS (W/O ANY EFFECTS (except, probably, taunt))==========
+Murloc Raider (1, 2/1)
+Bloodfen Raptor (2, 3/2) (beast)
+River Crocolisk (2, 2/3) (beast)
+Magma Rager (3, 5/1)
+Chillwind Yeti (4, 4/5)
+Oasis Snapjaw (4, 2/7) (beast)
+Boulderfist Ogre (6, 6/7)
+War Golem (7, 7/7)
+Core Hound (7, 9/5) (beast)
+
+Goldshire Footman (1, 1/2) (Taunt)
+Frostwolf Grunt (2, 2/2) (Taunt)
+Ironfur Grizzly (3, 3/3) (Taunt) (beast)
+Silverback Patriarch (3, 1/4) (Taunt) (beast)
+Sen'jin Shieldmasta (4, 3/5) (Taunt)
+Booty Bay Bodyguard (5, 5/4) (Taunt)
+Lord of the Arena (6, 6/5) (Taunt)
+
+==========BASIC CARDS (WITH EFFECTS (except taunt))==========
+Kobold Geomancer (2, 2/2) (Spell Damage +1)
+Dalaran Mage (3, 1/4) (Spell Damage +1)
+Ogre Magi (4, 4/4) (Spell Damage +1)
+Archmage (6, 4/7) (Spell Damage +1)
+
+Stonetusk Boar (1, 1/1) (Charge) (beast)
+Bluegill Warrior (2, 2/1) (Charge) (murloc)
+Wolfrider (3, 3/1) (Charge)
+Stormwind Knight (4, 2/5) (Charge)
+Reckless Rocketeer (6, 5/2) (Charge)
+
+Raid Leader (3, 2/2) (Your other minions have +1 Attack.)
+Stormwind Champion (7, 6/6) (Your other minions have +1/+1.)
+Grimscale Oracle (1, 1/1) (ALL other Murlocs have +1 Attack.) // only if types of creatures will be added
+Gurubashi Berserker (5, 2/7) (Whenever this minion takes damage, gain +3 Attack.)
+
+Novice Engineer (2, 1/1) (Battlecry: Draw a card.)
+Gnomish Inventor (Battlecry: Draw a card.)
+Nigtblade (5, 4/4) (Battlecry: Deal 3 damage to the enemy hero.)
+Frostwolf Warlord (5, 4/4) (Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.)
+Darkscale Healer (5, 4/5) (Battlecry: Restore 2 Health to all friendly characters.)
+
+Murloc Tidehunter (2, 2/1) (Battlecry: Summon a 1/1 Murloc Scout.) (murloc) //Murloc Scout (0, 1/1) (murloc)
+Razorfen Hunter (3, 2/3) (Battlecry: Summon a 1/1 Boar.) //Boar (0, 1/1) (beast)
+Dragonling Mechanic (4, 2/4) (Battlecry: Summon a 2/1 Mechanical Dragonling) //Mechanical Dragonling (1, 2/1) (mech)
+
+Elven Archer (1, 1/1) (Battlecry: Deal 1 damage.)
+Voodoo Doctor (1, 2/1) (Battlecry: Restore 2 Health.)
+Shattered Sun Cleric (2, 3/2) (Battlecry: Give a friendly minion +1/+1.)
+Ironforge Rifleman (3, 2/2) (Battlecry: Deal 1 damage.)
+Stormpike Commando (5, 4/2) (Battlecry: Deal 2 damage.)
+
+Acidic Swamp Ooze (2, 3/2) (Battlecry: Destroy your opponent's weapon.) // for weapon
