@@ -1,0 +1,50 @@
+[
+  {
+    "indentfier": {
+      "name": "Garrosh",
+      "nickname": "Warrior",
+      "surname": "Hellscream"
+    },
+    "rating": 8.9,
+    "firstInvestmentDate": "1970-25-09",
+    "experienceYears": 46,
+    "totalMoneyInvested": 10000000,
+    "curInvest": "ArmorUp"
+  },
+  {
+    "indentfier": {
+      "name": "Anduin",
+      "nickname": "Priest",
+      "surname": "Wrynn"
+    },
+    "rating": 5.6,
+    "firstInvestmentDate": "1995-15-03",
+    "experienceYears": 21,
+    "totalMoneyInvested": 1000000,
+    "curInvest": "LesserHeal"
+  },
+      {
+    "indentfier": {
+      "name": "Rexxar",
+      "nickname": "'Hunter'",
+      "surname": "Face"
+    },
+    "rating": 8.1,
+    "firstInvestmentDate": "1985-20-01",
+    "experienceYears": 31,
+    "totalMoneyInvested": 5000000,
+    "curInvest": "SteadyShot"
+  },
+      {
+    "indentfier": {
+      "name": "Jaina",
+      "nickname": "Mage",
+      "surname": "Proudmoore"
+    },
+    "rating": 7.6,
+    "firstInvestmentDate": "1990-25-06",
+    "experienceYears": 26,
+    "totalMoneyInvested": 3500000,
+    "curInvest": "Fireblast"
+  }
+]

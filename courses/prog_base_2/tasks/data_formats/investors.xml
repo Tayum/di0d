@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<investors>
+  <investor>
+    <identifier>
+      <name>Garrosh</name>
+      <nickname>Warrior</nickname>
+      <surname>Hellscream</surname>
+    </identifier>
+    <rating>8.9</rating>
+    <firstInvestmentDate>1970-25-09</firstInvestmentDate>
+    <experienceYears>46</experienceYears>
+    <totalMoneyInvested curInvest="ArmorUp">10000000</totalMoneyInvested>
+  </investor>
+  <investor>
+    <identifier>
+      <name>Anduin</name>
+      <nickname>Priest</nickname>
+      <surname>Wrynn</surname>
+    </identifier>
+    <rating>5.6</rating>
+    <firstInvestmentDate>1995-15-03</firstInvestmentDate>
+    <experienceYears>21</experienceYears>
+    <totalMoneyInvested curInvest="LesserHeal">1000000</totalMoneyInvested>
+  </investor>
+  <investor>
+    <identifier>
+      <name>Rexxar</name>
+      <nickname>Hunter</nickname>
+      <surname>Face</surname>
+    </identifier>
+    <rating>8.1</rating>
+    <firstInvestmentDate>1985-20-01</firstInvestmentDate>
+    <experienceYears>31</experienceYears>
+    <totalMoneyInvested curInvest="SteadyShot">5000000</totalMoneyInvested>
+  </investor>
+  <investor>
+    <identifier>
+      <name>Jaina</name>
+      <nickname>Mage</nickname>
+      <surname>Proudmoore</surname>
+    </identifier>
+    <rating>7.6</rating>
+    <firstInvestmentDate>1990-25-06</firstInvestmentDate>
+    <experienceYears>26</experienceYears>
+    <totalMoneyInvested curInvest="Fireblast">3500000</totalMoneyInvested>
+  </investor>
+</investors>
