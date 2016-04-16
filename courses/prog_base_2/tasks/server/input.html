@@ -1,0 +1,29 @@
+<!--POST IN input.html IS CONSTRUCTED FOR FIRST INVESTOR BY DEFAULT ([0] one)
+    IF YOU WANT TO CHANGE INVESTOR WITH ANOTHER INDEX, FEEL FREE TO CHANGE INDEX BELOW
+-->
+
+<html>
+<head>
+</head>
+<body>                        <!-- CHANGE YOUR INDEX HERE! -->
+<form action="http://127.0.0.1:5000/investors/0" method="POST">
+	First Name:<br>
+	<input type="text" name="name" value='Ivan'><br>
+	Nickname:<br>
+	<input type="text" name="nickname" value='Vano'><br>
+	Surname:<br>
+	<input type="text" name="surname" value="Ivanov"><br>
+	Rating:<br>
+	<input type="text" name="rating" value="5.5"><br>
+	First investment date:<br>
+	<input type="text" name="firstInvestmentDate" value="1995-01-01"><br>
+	Experience in years:<br>
+	<input type="text" name="experienceYears" value="10"><br>
+	Total money invested (in $):<br>
+	<input type="text" name="totalMoneyInvested" value="25000"><br>
+	Current investment project:<br>
+	<input type="text" name="curInvest" value="Memasiki"><br>
+	<input type="submit" value='Send POST request' />
+</form>
+</body>
+</html>
