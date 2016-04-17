@@ -570,6 +570,12 @@ int main(void) {
 	RenderWindow window(sf::VideoMode(1366, 768), "Minion Card Test");	//CREATING A WINDOW
 	Picture testPic = Picture("murlocRaider.png", 0, 0, 286, 395);
 	MinionCard test = MinionCard(testPic, "Murloc Raider", 2, 1, 1, false);
+	Image map_image; //obj of image of map
+	map_image.loadFromFile("images/backgroundTilesets.png"); //loading file for map
+	Texture map; // map texture
+	map.loadFromImage(map_image); //filling texture with a img
+	Sprite s_map; //creating sprite of the map
+	s_map.setTexture(map); //feeling texture with sprite
 	//cardSprite.setScale(0.5, 0.5);	//setting scale of img to X*0.5, Y*0.5
 	Clock clock;
 
@@ -589,15 +595,21 @@ int main(void) {
 		for (int i = 0; i < HEIGHT_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP; j++) {
 				if (TileMap[i][j] == 'h') {
+					s_map.setTextureRect(IntRect(96, 0, 32, 32)); //if 'h' encountered - draw (96, 0) from backgroundTilesets and so on;
 				}
 				else if (TileMap[i][j] == 'c') {
+					s_map.setTextureRect(IntRect(64, 0, 32, 32));
 				}
 				else if ((TileMap[i][j] == 'b')) {
+					s_map.setTextureRect(IntRect(0, 0, 32, 32));
 				}
 				else if ((TileMap[i][j] == ' ')) {
+					s_map.setTextureRect(IntRect(32, 0, 32, 32));
 				}
 
+				s_map.setPosition(j * 32, i * 32); //drawing each of squares
 
+				window.draw(s_map); //draw each of squares
 			}
 		}
 		window.draw(test.getSprite());		//drawing our sprite (???)
