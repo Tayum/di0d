@@ -1,10 +1,63 @@
-﻿#include <stdio.h>
+﻿#include <iostream>
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-#include <iostream>
 #include <time.h>
 
+#include <SFML/Graphics.hpp>
+
+#include "background.h"
+
 using namespace std;
+using namespace sf;
+
+//SFML: CLASS OF SPRITE (for MinionCard)
+class Picture {
+public:
+	float imgX;	//appear coordinate X
+	float imgY;	//appear coordinate Y
+	float imgHeight; //height of img
+	float imgWidth;	//width of image
+	String File;	//name of file with img
+	Image image;	//image
+	Texture texture;	//texture
+	Sprite sprite;	//sprite
+public:
+	Picture() {
+		File = "shadowOfNothing.png";
+		image.loadFromFile("images/" + File);
+		texture.loadFromImage(image);
+		sprite.setTexture(texture);
+		float imgHeight = 286; //height of img
+		float imgWidth = 395;	//width of image
+		imgX = 0;
+		imgY = 0;
+		sprite.setTextureRect(IntRect(0, 0, imgHeight, imgWidth));
+	}
+	Picture(String imageFileName, float imgX, float imgY, float imgHeight, float imgWidth) {
+		File = imageFileName;
+		image.loadFromFile("images/" + File);
+		texture.loadFromImage(image);
+		sprite.setTexture(texture);
+		this->imgHeight = imgHeight;
+		this->imgWidth = imgWidth;
+		this->imgX = imgX;
+		this->imgY = imgY;
+		sprite.setTextureRect(IntRect(0, 0, imgHeight, imgWidth));
+	}
+
+	void setPos(float X, float Y) {
+		sprite.setPosition(X, Y);
+	}
+
+	Sprite getSprite() {
+		return sprite;
+	}
+
+	//sprite.move(0.1*time, 0); //move the sprite to +0.1 (x); +0 (y) coordinates
+
+};
 
 class MinionCard {	//CHANGE TO CARD, + MINION/SPELL
 	char * cardName;
@@ -14,8 +67,10 @@ class MinionCard {	//CHANGE TO CARD, + MINION/SPELL
 	bool taunt;
 	int curHealth;
 	int curAttack;
+	Picture pic; //variable of class connected with SFML
 public:
 	MinionCard() {
+		pic = Picture("shadowOfNothing.png", 0, 0, 286, 395);
 		cardName = "NoName";
 		attack = 0;
 		health = 0;
@@ -24,7 +79,8 @@ public:
 		curHealth = 0;
 		curAttack = 0;
 	}
-	MinionCard(char * cardName, int attack, int health, int manacost, bool taunt) {
+	MinionCard(Picture pic, char * cardName, int attack, int health, int manacost, bool taunt) {
+		this->pic = pic;
 		this->cardName = cardName;
 		this->attack = attack;
 		this->health = health;
@@ -82,7 +138,10 @@ public:
 		printf("CURRENT HEALTH: %i\n", curHealth);
 		puts("");
 	}
-
+	
+	Sprite getSprite() {
+		return pic.getSprite();
+	}
 };
 
 //(it's STACK, it's not deck!)
@@ -267,7 +326,6 @@ public:
 	}
 
 	MinionCard getByInd(int index) {
-		int i;
 		if (isEmpty() || index >= curCardAmount || index < 0) {
 			MinionCard card = MinionCard();
 			return card;
@@ -350,7 +408,6 @@ public:
 	}
 
 	MinionCard getByInd(int index) {
-		int i;
 		if (isEmpty() || !isValidInd(index)) {
 			MinionCard card = MinionCard();
 			return card;
@@ -510,44 +567,43 @@ public:
 };
 
 int main(void) {
-	srand(time(NULL));
-	Player firstPlayer(10, 10, 10, 7);
-	MinionCard card;
+	RenderWindow window(sf::VideoMode(1366, 768), "Minion Card Test");	//CREATING A WINDOW
+	Picture testPic = Picture("murlocRaider.png", 0, 0, 286, 395);
+	MinionCard test = MinionCard(testPic, "Murloc Raider", 2, 1, 1, false);
+	//cardSprite.setScale(0.5, 0.5);	//setting scale of img to X*0.5, Y*0.5
+	Clock clock;
 
-	card = MinionCard("Murloc Raider", 2, 1, 1, false);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Frostwolf Grunt", 2, 2, 2, true);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Magma Rager", 5, 1, 3, false);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Sen'jin Shieldmasta", 3, 5, 4, true);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Booty Bay Bodyguard", 5, 4, 5, true);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Lord of the Arena", 6, 5, 6, true);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("War Golem", 7, 7, 7, false);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Core Hound", 9, 5, 7, false);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("River Crocolisk", 2, 3, 2, false);
-	firstPlayer.deck.pushRand(card);
-	card = MinionCard("Ironfur Grizzly", 3, 3, 3, true);
-	firstPlayer.deck.pushRand(card);
-	for (int i = 0; i < 11; i++) {
-		firstPlayer.startTurn();
+	while (window.isOpen()) { //MAIN CYCLE OF SFML
+		float time = clock.getElapsedTime().asMicroseconds(); //receiving passed time (in ms)
+		clock.restart(); //restarting clock
+		time = time / 800; // speed of our game
+		//std::cout << time << "\n"; //showing the time passed in console
+		sf::Event event;	//wtf is that
+		while (window.pollEvent(event)) { //wtf is that
+			if (event.type == sf::Event::Closed)	//wtf is that
+				window.close();		//closing our main window
+		}
+
+		window.clear();		//clearing whole windows
+		//DRAW MAP
+		for (int i = 0; i < HEIGHT_MAP; i++) {
+			for (int j = 0; j < WIDTH_MAP; j++) {
+				if (TileMap[i][j] == 'h') {
+				}
+				else if (TileMap[i][j] == 'c') {
+				}
+				else if ((TileMap[i][j] == 'b')) {
+				}
+				else if ((TileMap[i][j] == ' ')) {
+				}
+
+
+			}
+		}
+		window.draw(test.getSprite());		//drawing our sprite (???)
+		window.display();		//drawing our sprite (???)
+		
 	}
-	for (int i = 0; i < 11; i++) {
-		puts("\n=====FIRST PLAYER HAND GOES HERE=====");
-		firstPlayer.hand.printCards();
-		puts("\n=====================================\n");
-		firstPlayer.playCard(0);
-		puts("\n=====FIRST PLAYER BATTLEFIELD GOES HERE=====");
-		firstPlayer.bf.printCards();
-		puts("\n============================================\n");
-		firstPlayer.startTurn();
-	}
-	getch();
 	return 0;
 }
 
