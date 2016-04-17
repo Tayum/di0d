@@ -6,7 +6,6 @@
 
 using namespace std;
 
-//everything seems working fine
 class MinionCard {	//CHANGE TO CARD, + MINION/SPELL
 	char * cardName;
 	int attack;
@@ -47,6 +46,10 @@ public:
 		return curHealth;
 	}
 
+	int getHealth() {
+		return health;
+	}
+
 	bool getTaunt() {
 		return taunt;
 	}
@@ -80,40 +83,15 @@ public:
 		puts("");
 	}
 
-	/*void heroTrading(MinionCard cardAttacker, Hero heroDefender) {
-	//hero.health-=cardAttacker.curAttack;
-	}*/
 };
 
-/*
-=====SPELL CLASS CARD (raw)=====
-class SpellCard {
-	char * cardName;
-	int manacost;
-	char * desc;
-public:
-	SpellCard() {
-		cardName = "NoName";
-		manacost = 0;
-		desc = "NoDesc";
-	}
-	SpellCard(char * cardName, int manacost, char * desc) {
-		this->cardName = cardName;
-		this->manacost = manacost;
-		this->desc = desc;
-	}
-
-	//some funcs
-};*/
-
-//everything seems working fine
 //(it's STACK, it's not deck!)
 class Deck {
 	int maxCardAmount;
 	int curCardAmount;
 	int firstCard;
 	int lastCard;
-	MinionCard * cardList;	//CARD AT ALL
+	MinionCard * cardList;
 public:
 	Deck() {
 		maxCardAmount = 0;
@@ -127,14 +105,14 @@ public:
 		firstCard = 0;
 		lastCard = 0;
 		curCardAmount = 0;
-		cardList = new MinionCard[maxCardAmount];	//CARD AT ALL
+		this->cardList = new MinionCard[maxCardAmount];
 	}
 	~Deck() {
 		printf("Desctructor of DECK\n");
 		delete[] cardList;
 	}
 
-	void push(MinionCard card) {	//CARD AT ALL
+	void push(MinionCard card) {
 		if (!isFull()) {
 			cardList[lastCard] = card;
 			lastCard++;
@@ -169,26 +147,26 @@ public:
 		}
 	}
 
-	MinionCard pop() {	//CARD AT ALL
+	MinionCard pop() {
 		if (isEmpty()) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			MinionCard card = cardList[lastCard - 1];	//CARD AT ALL
+			MinionCard card = cardList[lastCard - 1];
 			lastCard--;
 			curCardAmount--;
 			return card;
 		}
 	}
 
-	MinionCard peek() {	//CARD AT ALL
+	MinionCard peek() {
 		if (isEmpty()) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			MinionCard card = cardList[lastCard - 1];	//CARD AT ALL
+			MinionCard card = cardList[lastCard - 1];
 			return card;
 		}
 	}
@@ -208,6 +186,7 @@ private:
 		return curCardAmount == maxCardAmount;
 	}
 };
+
 //FOR HAND CLASS! (+ probably turn class?)
 class Mana {
 	int curMana;
@@ -226,7 +205,7 @@ public:
 	}
 
 	bool isEnough(MinionCard card) {
-		return curMana <= card.getManacost();
+		return curMana >= card.getManacost();
 	}
 
 	void useCard(MinionCard card) {
@@ -252,12 +231,11 @@ private:
 	}
 };
 
-//everything seems working fine
 class Hand {
 	int maxCardAmount;
 	int curCardAmount;
 	int lastCard;
-	MinionCard * cardList;	//CARD AT ALL
+	MinionCard * cardList;
 public:
 	Mana mana;
 
@@ -272,7 +250,7 @@ public:
 		lastCard = 0;
 		maxCardAmount = size;
 		curCardAmount = 0;
-		cardList = new MinionCard[maxCardAmount];	//CARD AT ALL
+		cardList = new MinionCard[maxCardAmount];
 		mana = Mana(manaCap);
 	}
 	~Hand() {
@@ -280,7 +258,7 @@ public:
 		delete[] cardList;
 	}
 
-	void addLast(MinionCard card) {	//CARD AT ALL
+	void addLast(MinionCard card) {
 		if (!isFull()) {
 			cardList[lastCard] = card;
 			lastCard++;
@@ -288,31 +266,31 @@ public:
 		}
 	}
 
-	MinionCard getByInd(int index) {	//CARD AT ALL
+	MinionCard getByInd(int index) {
 		int i;
 		if (isEmpty() || index >= curCardAmount || index < 0) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			MinionCard card = cardList[index];	//CARD AT ALL
+			MinionCard card = cardList[index];
 			return card;
 		}
 	}
 
-	MinionCard delByInd(int index) {	//CARD AT ALL
+	MinionCard delByInd(int index) {
 		int i;
 		if (isEmpty() || index >= curCardAmount || index < 0 || !mana.isEnough(cardList[index])) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
 			mana.useCard(cardList[index]);
-			MinionCard card = cardList[index];	//CARD AT ALL
+			MinionCard card = cardList[index];
 			for (i = index; i < curCardAmount - 1; i++) {
 				cardList[i] = cardList[i + 1];
 			}
-			cardList[i] = MinionCard();	//CARD AT ALL
+			cardList[i] = MinionCard();
 			lastCard--;
 			curCardAmount--;
 			return card;
@@ -325,18 +303,18 @@ public:
 		}
 	}
 
-private:
+
 	bool isEmpty() {
 		return curCardAmount == 0;
 	}
-
+private:
 	bool isFull() {
 		return curCardAmount == maxCardAmount;
 	}
 
 };
 
-class Battlefield : public MinionCard {
+class Battlefield {
 	int maxCardAmount;
 	int curCardAmount;
 	int firstCard;
@@ -374,11 +352,11 @@ public:
 	MinionCard getByInd(int index) {
 		int i;
 		if (isEmpty() || !isValidInd(index)) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			MinionCard card = cardList[index];	//CARD AT ALL
+			MinionCard card = cardList[index];
 			return card;
 		}
 	}
@@ -386,15 +364,15 @@ public:
 	MinionCard delByInd(int index) {
 		int i;
 		if (isEmpty() || !isValidInd(index)) {
-			MinionCard card = MinionCard();	//CARD AT ALL
+			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			MinionCard card = cardList[index];	//CARD AT ALL
+			MinionCard card = cardList[index];
 			for (i = index; i < curCardAmount - 1; i++) {
 				cardList[i] = cardList[i + 1];
 			}
-			cardList[i] = MinionCard();	//CARD AT ALL
+			cardList[i] = MinionCard();
 			lastCard--;
 			curCardAmount--;
 			return card;
@@ -420,13 +398,12 @@ public:
 		return false;
 	}
 
+	bool isFull() {
+		return curCardAmount == maxCardAmount;
+	}
 private:
 	bool isEmpty() {
 		return curCardAmount == 0;
-	}
-
-	bool isFull() {
-		return curCardAmount == maxCardAmount;
 	}
 };
 
@@ -450,7 +427,7 @@ public:
 	}
 };
 
-class Player {	//public Deck, public Hand, public Battlefield (lel?)
+class Player {
 public:
 	Deck deck;
 	Hand hand;
@@ -469,22 +446,27 @@ public:
 		this->bf = battlefield;
 		turn = Turn();
 	}
-	Player(int deckCap, int handCap, int manaCap, int battlefieldCap) {
-		deck = Deck(deckCap);
-		hand = Hand(handCap, manaCap);
-		bf = Battlefield(battlefieldCap);
+	Player(int deckCap, int handCap, int manaCap, int battlefieldCap) 
+		: deck(deckCap), hand(handCap, manaCap), bf(battlefieldCap) {
+		//deck = Deck(deckCap);
+		//hand = Hand(handCap, manaCap);
+		//bf = Battlefield(battlefieldCap);
 		turn = Turn();
 	}
 
 	void drawCard() {
 		MinionCard card = deck.pop();
-		hand.addLast(card);
+		if (card.getHealth() != 0) {
+			hand.addLast(card);
+		}
 	}
 
 	void playCard(int indexHand) {		//in late advance: add this func to Game class?
-		MinionCard card = hand.delByInd(indexHand);
-		hand.mana.useCard(card);
-		bf.addLast(card);
+		if (!bf.isFull() && !hand.isEmpty()) {
+			MinionCard card = hand.delByInd(indexHand);
+			hand.mana.useCard(card);
+			bf.addLast(card);
+		}
 	}
 
 	void startTurn() {
@@ -529,65 +511,45 @@ public:
 
 int main(void) {
 	srand(time(NULL));
-	Player firstPlayer = Player(10, 10, 10, 7);
-	Player secondPlayer = Player(10, 10, 10, 7);
+	Player firstPlayer(10, 10, 10, 7);
 	MinionCard card;
+
 	card = MinionCard("Murloc Raider", 2, 1, 1, false);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Frostwolf Grunt", 2, 2, 2, true);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
-	getch();
-	return 0;
-}
-
-
-//FOR FUTURE TESTS
-	/*card = MinionCard("Magma Rager", 5, 1, 3, false);
+	card = MinionCard("Magma Rager", 5, 1, 3, false);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Sen'jin Shieldmasta", 3, 5, 4, true);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Booty Bay Bodyguard", 5, 4, 5, true);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Lord of the Arena", 6, 5, 6, true);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("War Golem", 7, 7, 7, false);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Core Hound", 9, 5, 7, false);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("River Crocolisk", 2, 3, 2, false);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
 	card = MinionCard("Ironfur Grizzly", 3, 3, 3, true);
 	firstPlayer.deck.pushRand(card);
-	secondPlayer.deck.pushRand(card);
-	for (int i = 0; i < 10; i++) {
-		puts("\n=====FIRST PLAYER DECK GOES HERE=====");
-		firstPlayer.deck.printCards();
-		puts("\n=====================================\n");
-		puts("\n=====SECOND PLAYER DECK GOES HERE=====");
-		secondPlayer.deck.printCards();
-		puts("\n======================================\n");
+	for (int i = 0; i < 11; i++) {
+		firstPlayer.startTurn();
+	}
+	for (int i = 0; i < 11; i++) {
 		puts("\n=====FIRST PLAYER HAND GOES HERE=====");
 		firstPlayer.hand.printCards();
 		puts("\n=====================================\n");
-		puts("\n=====SECOND PLAYER HAND GOES HERE=====");
-		secondPlayer.hand.printCards();
-		puts("\n======================================\n");*/
-		/*puts("\n=====FIRST PLAYER BATTLEFIELD GOES HERE=====");
+		firstPlayer.playCard(0);
+		puts("\n=====FIRST PLAYER BATTLEFIELD GOES HERE=====");
 		firstPlayer.bf.printCards();
 		puts("\n============================================\n");
-		puts("\n=====FIRST PLAYER BATTLEFIELD GOES HERE=====");
-		secondPlayer.bf.printCards();
-		puts("\n============================================\n");
-	}*/
+		firstPlayer.startTurn();
+	}
+	getch();
+	return 0;
+}
 
 /*
 //LIST OF CARDS (NON-TAUNT)
@@ -608,185 +570,3 @@ MinionCard silverbackPatriarch = MinionCard("Silverback Patriarch", 1, 4, 3, tru
 MinionCard senjinShieldmasta = MinionCard("Sen'jin Shieldmasta", 3, 5, 4, true);
 MinionCard bootyBayBodyguard = MinionCard("Booty Bay Bodyguard", 5, 4, 5, true);
 MinionCard lordOfTheArena = MinionCard("Lord of the Arena", 6, 5, 6, true);*/
-
-/*
-=====BATTLEFIELD TEST=====
-Battlefield myBF = Battlefield(7);
-myBF.addLast(ogre);
-myBF.printCards();
-myBF.addLast(guardTree);
-myBF.printCards();
-myBF.delByInd(1);
-myBF.printCards();
-myBF.delByInd(0);
-myBF.printCards();*/
-
-/*
-=====DECK TEST=====
-Deck myDeck = Deck(30);
-myDeck.push(ogre);
-myDeck.push(guardTree);
-MinionCard test = myDeck.pop();
-test.printMinionCard();
-test= myDeck.pop();
-test.printMinionCard();
-test = myDeck.pop();
-test.printMinionCard();*/
-
-/*
-=====HAND TEST=====
-Hand myHand = Hand(10, 10);
-myHand.addLast(ogre);
-myHand.addLast(guardTree);
-MinionCard test = myHand.delByInd(0);
-test.printMinionCard();
-test = myHand.getByInd(1);
-test.printMinionCard();
-test = myHand.delByInd(0);
-test.printMinionCard();
-test = myHand.delByInd(0);
-test.printMinionCard();*/
-
-/*
-=====MINION CARD TEST=====
-ogre.printMinionCard();
-guardTree.printMinionCard();
-ogre.attack(guardTree);
-ogre.printMinionCard();
-guardTree.printMinionCard();*/
-
-
-/*
-=====HERO CLASS=====
-class Hero {
-
-char * heroName;
-int health;
-int curHealth;
-HeroPower myHeroPower;
-public:
-Hero(char * heroName) {
-health = 30;
-curHealth = 30;
-myHeroPower = HeroPower("Jaina");
-
-}
-};
-
-class HeroPower {
-char * heroPowerName;
-const int manacost = 2;
-char * desc;
-public:
-HeroPower(char * name) {
-this->heroPowerName = name;
-desc = "Jaina";
-}
-};*/
-
-/*
-=====HAND USING LIST=====
-class HandElement {
-public:
-	MinionCard card;
-	HandElement * next;
-
-	HandElement() {
-		card = MinionCard();	//CARD AT ALL
-		next = NULL;
-	}
-	~HandElement() {
-		delete next;
-	}
-};
-
-class Hand {
-	HandElement firstCard;
-	HandElement lastCard;
-	int maxCardAmount;
-	int curCardAmount;
-public:
-	Hand() {
-		firstCard = HandElement();
-		lastCard = HandElement();
-		maxCardAmount = 0;
-		curCardAmount = 0;
-	}
-	Hand(int size) {
-		firstCard = HandElement();
-		lastCard = HandElement();
-		maxCardAmount = size;
-		curCardAmount = 0;
-	}
-
-	void drawCard(MinionCard card) {
-		HandElement newElement = HandElement();
-		newElement.card = card;
-		if (&lastCard == NULL) {	//CHECK IF WORKS
-			firstCard = newElement;
-			lastCard = newElement;
-		}
-		else {
-			lastCard.next = &newElement; 	//CHECK IF WORKS
-			lastCard = newElement;
-		}
-		curCardAmount++;
-	}
-
-	MinionCard playCard(int index) {	//CARD AT ALL
-		MinionCard card;				//CARD AT ALL
-		if (&firstCard == NULL) {
-			card = MinionCard();	//CARD AT ALL
-			return card;
-		}
-		else if (index < 0 || index >= curCardAmount) {
-			card = MinionCard();	//CARD AT ALL
-			return card;
-		}
-		else {
-			if (&firstCard == &lastCard) {
-				card = firstCard.card;
-				firstCard = HandElement();
-				lastCard = HandElement();
-			}
-			else if (index == 0) {
-				card = firstCard.card;
-				firstCard.card = firstCard.next->card;	//wtf
-				firstCard.next = firstCard.next->next;	//wtf
-			}
-			else {
-				HandElement t = firstCard;
-				for (int i = 1; i < index; i++) {
-					t.next = t.next->next;	//wtf
-				}
-				card = t.next->card;
-				if (lastCard.next == t.next) {	//wtf
-					lastCard = t;
-				}
-				t.next = t.next->next;
-			}
-			curCardAmount--;
-			return card;
-		}
-	}
-
-	MinionCard showCard(int index) {	//CARD AT ALL
-		MinionCard card;				//CARD AT ALL
-		if (&firstCard == NULL) {
-			card = MinionCard();	//CARD AT ALL
-			return card;
-		}
-		else {
-			if (&firstCard == &lastCard || index==0) {
-				card = firstCard.card;
-			}
-			else {
-				HandElement t = firstCard;
-				for (int i = 1; i < index; i++) {
-					t.next = t.next->next;	//wtf
-				}
-				card = t.next->card;
-			}
-			return card;
-		}
-	}*/
