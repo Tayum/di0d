@@ -163,3 +163,108 @@ guardTree.printMinionCard();*/
 	getch();
 	return 0;
 */
+
+/*
+=====ALL TEXT POSITIONS AND STYLES
+Font font;
+font.loadFromFile("font/CyrilicOld.TTF");
+
+Text hpEnemy("", font, 30);
+Text curManaEnemy("", font, 25);
+Text maxManaEnemy("", font, 25);
+Text handEnemy("", font, 25);
+Text deckEnemy("", font, 25);
+Text hpPlayer("", font, 30);
+Text curManaPlayer("", font, 25);
+Text maxManaPlayer("", font, 25);
+Text handPlayer("", font, 25);
+Text deckPlayer("", font, 25);
+
+hpEnemy.setColor(Color::Red);
+curManaEnemy.setColor(Color::Cyan);
+maxManaEnemy.setColor(Color::Blue);
+handEnemy.setColor(Color::Green);
+deckEnemy.setColor(Color::Yellow);
+hpPlayer.setColor(Color::Red);
+curManaPlayer.setColor(Color::Cyan);
+maxManaPlayer.setColor(Color::Blue);
+handPlayer.setColor(Color::Green);
+deckPlayer.setColor(Color::Yellow);
+
+hpEnemy.setStyle(Text::Bold);
+curManaEnemy.setStyle(Text::Italic);
+maxManaEnemy.setStyle(Text::Bold);
+handEnemy.setStyle(Text::Italic);
+deckEnemy.setStyle(Text::Bold);
+hpPlayer.setStyle(Text::Bold);
+curManaPlayer.setStyle(Text::Italic);
+maxManaPlayer.setStyle(Text::Bold);
+handPlayer.setStyle(Text::Italic);
+deckPlayer.setStyle(Text::Bold);
+
+========================================
+
+**************
+buff << player.getMana();
+**************
+
+ostringstream buff;
+buff.str("");
+buff << "11";
+hpEnemy.setString("" + buff.str());
+hpEnemy.setPosition(0, 0);
+buff.str("");
+buff << "22";
+curManaEnemy.setString("" + buff.str());
+curManaEnemy.setPosition(0, 64);
+buff.str("");
+buff << "33";
+maxManaEnemy.setString("" + buff.str());
+maxManaEnemy.setPosition(0, 128);
+buff.str("");
+buff << "44";
+handEnemy.setString("" + buff.str());
+handEnemy.setPosition(96, 0);
+buff.str("");
+buff << "55";
+deckEnemy.setString("" + buff.str());
+deckEnemy.setPosition(96, 128);
+buff.str("");
+buff << "66";
+hpPlayer.setString("" + buff.str());
+hpPlayer.setPosition(0, 480);
+buff.str("");
+buff << "77";
+curManaPlayer.setString("" + buff.str());
+curManaPlayer.setPosition(0, 544);
+buff.str("");
+buff << "88";
+maxManaPlayer.setString("" + buff.str());
+maxManaPlayer.setPosition(0, 608);
+buff.str("");
+buff << "99";
+handPlayer.setString("" + buff.str());
+handPlayer.setPosition(96, 480);
+buff.str("");
+buff << "00";
+deckPlayer.setString("" + buff.str());
+deckPlayer.setPosition(96, 608);
+*/
+
+/*
+=====CARDS POSITIONS TEST=====
+Picture testPic = Picture("murlocRaider.png", 0, 0, 286, 395);
+MinionCard test = MinionCard(testPic, "Murloc Raider", 2, 1, 1, false);
+
+**************************FOR BF (ENEMY/PLAYER)******************************
+test.pic.sprite.setScale(0.671, 0.405); //FOR BF!
+//ENEMY
+test.pic.sprite.setPosition(192*POSITION, 160); //POSITION IS POSITION ON THE BOARD (0-6)
+//PLAYER
+test.pic.sprite.setPosition(192*POSITION, 320); //POSITION IS POSITION ON THE BOARD (0-6)
+
+**************************FOR HAND (PLAYER)******************************
+//test.pic.sprite.setScale(0.405, 0.425);	//FOR HAND!
+//PLAYER
+//test.pic.sprite.setPosition(128*(POSITION+1), 480);	//POSITION IS POSITION IN THE HAND (0-9)
+*/

@@ -1,15 +1,15 @@
 #include <SFML/Graphics.hpp>
-const int HEIGHT_MAP = 24; //map height
-const int WIDTH_MAP = 42;	//map width
+
+const int HEIGHT_MAP = 20; // map height
+const int WIDTH_MAP = 42;	// map width
 
 
 sf::String TileMap[HEIGHT_MAP] = {
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
-	"hhhhhhhhhhhhcccccccccccccccccccccccccccccc",
+	"hhhhcccccccccccccccccccccccccccccccccccccc", //160*134,4 (???)
+	"hhhhcccccccccccccccccccccccccccccccccccccc",
+	"hhhhcccccccccccccccccccccccccccccccccccccc",
+	"hhhhcccccccccccccccccccccccccccccccccccccc",
+	"hhhhcccccccccccccccccccccccccccccccccccccc",
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -20,12 +20,9 @@ sf::String TileMap[HEIGHT_MAP] = {
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
 	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-	"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-	"hhhhhhhhhhhh                              ",
-	"hhhhhhhhhhhh                              ",
-	"hhhhhhhhhhhh                              ",
-	"hhhhhhhhhhhh                              ",
-	"hhhhhhhhhhhh                              ",
-	"hhhhhhhhhhhh                              ",
+	"hhhh                                      ",
+	"hhhh                                      ",
+	"hhhh                                      ",
+	"hhhh                                      ",
+	"hhhh                                      ",
 };
