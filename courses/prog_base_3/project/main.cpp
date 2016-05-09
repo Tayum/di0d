@@ -63,6 +63,7 @@ class MinionCard { // -> redo into Card class (minion/spell)
 	int curHealth;
 	int manacost;
 	bool taunt;
+	bool attacked;
 public:
 	Picture pic; //variable of class connected with SFML
 
@@ -75,6 +76,7 @@ public:
 		curHealth = 0;
 		manacost = 0;
 		taunt = false;
+		attacked = true;
 	}
 	MinionCard(Picture pic, std::string cardName, int attack, int health, int manacost, bool taunt) {
 		this->pic = pic;
@@ -85,6 +87,7 @@ public:
 		curHealth = health;
 		this->manacost = manacost;
 		this->taunt = taunt;
+		attacked = true;
 	}
 
 	int getManacost(void) {
@@ -103,6 +106,10 @@ public:
 		return taunt;
 	}
 
+	bool hasAttacked(void) {
+		return attacked;
+	}
+
 	void setCurHealth(int newHealth) {
 		curHealth = newHealth;
 	}
@@ -111,9 +118,14 @@ public:
 		curAttack = newAttack;
 	}
 
+	void setHasAttacked(bool hasAttacked) {
+		attacked = hasAttacked;
+	}
+
 	void attackCard(MinionCard  * cardDefender) {
 		curHealth -= (*cardDefender).curAttack;
 		(*cardDefender).curHealth -= curAttack;
+		attacked = true;
 	}
 
 };
@@ -187,18 +199,18 @@ public:
 	}
 
 	void prepare(MinionCard arr[ALL_CARDS]) {
-	int counterArr[ALL_CARDS];
-	for (int i = 0; i < ALL_CARDS; i++) {
-		counterArr[i] = 0;
-	}
-	for (int i = 0; i < MAX_CARD_AMOUNT; i++) {
-		int randNum = rand() % ALL_CARDS;
-		if (counterArr[randNum] == 2) {
-			i--;
-			continue;
+		int counterArr[ALL_CARDS];
+		for (int i = 0; i < ALL_CARDS; i++) {
+			counterArr[i] = 0;
 		}
-		counterArr[randNum]++;
-		pushRand(arr[randNum]);
+		for (int i = 0; i < MAX_CARD_AMOUNT; i++) {
+			int randNum = rand() % ALL_CARDS;
+			if (counterArr[randNum] == 2) {
+				i--;
+				continue;
+			}
+			counterArr[randNum]++;
+			pushRand(arr[randNum]);
 		}
 	}
 
@@ -302,12 +314,11 @@ public:
 
 	MinionCard delByInd(int index) {
 		int i;
-		if (!isValidInd(index) || !mana.isEnough(cardList[index])) {
+		if (!isValidInd(index)) {
 			MinionCard card = MinionCard();
 			return card;
 		}
 		else {
-			mana.useCard(cardList[index]);
 			MinionCard card = cardList[index];
 			for (i = index; i < curCardAmount - 1; i++) {
 				cardList[i] = cardList[i + 1];
@@ -391,6 +402,15 @@ public:
 		}
 	}
 
+	void checkDead(void) {
+		for (int i = 0; i < curCardAmount; i++) {
+			if (cardList[i].getCurHealth() <= 0) {
+				delByInd(i);
+				break;
+			}
+		}
+	}
+
 	bool isValidInd(int index) {
 		return (index >= 0 && index < curCardAmount);
 	}
@@ -411,6 +431,34 @@ private:
 	bool isEmpty() {
 		return curCardAmount == 0;
 	}
+};
+
+class Hero {
+	static const int MAX_HP = 30;
+	int curHP;
+	std::string name;
+	// add hero ability?
+public:
+	Picture pic;
+
+	Hero(std::string name, Picture pic) {
+		curHP = MAX_HP;
+		this->name = name;
+		this->pic = pic;
+	}
+
+	int getCurHP(void) {
+		return curHP;
+	}
+
+	std::string getName(void) {
+		return name;
+	}
+
+	void setCurHP(int newHP) {
+		curHP = newHP;
+	}
+
 };
 
 class Turn {
@@ -436,32 +484,25 @@ public:
 class Player {
 public:
 	Deck deck;
-	Hand hand;
+	Hand hand;	// mana class is inside
 	Battlefield bf;
-	Turn turn;	// mana class is inside
+	Turn turn;
+	Hero hero;
 				// add hero!
-	Player()
-		: deck(), hand(), bf() {
+	Player(std::string heroName, Picture heroPic)
+		: deck(), hand(), bf(), hero(heroName, heroPic) {
 		//deck = Deck();
 		//hand = Hand();
 		//bf = Battlefield();
 		turn = Turn();
 	}
-	Player(Deck deck, Hand hand, Battlefield battlefield) {
+	Player(Deck deck, Hand hand, Battlefield battlefield, Hero hero) : hero(hero) {
 		this->deck = deck;
 		this->hand = hand;
 		this->bf = battlefield;
+		//this->hero = hero;
 		turn = Turn();
 	}
-	/*
-	=====NOT NEEDED BUT CAN BE USEFUL=====
-	Player(int deckCap, int handCap, int manaCap, int battlefieldCap)
-	: deck(deckCap), hand(handCap, manaCap), bf(battlefieldCap) {
-	//deck = Deck(deckCap);
-	//hand = Hand(handCap, manaCap);
-	//bf = Battlefield(battlefieldCap);
-	turn = Turn();
-	}*/
 
 	void drawCard() {
 		MinionCard card = deck.popLast();
@@ -481,6 +522,9 @@ public:
 	void startTurn() {
 		turn.start();
 		hand.mana.onTurnStart();
+		for (int i = 0; i < bf.getCurCardAmount(); i++) {
+			bf.cardList[i].setHasAttacked(false);
+		}
 		drawCard();
 	}
 
@@ -490,48 +534,65 @@ public:
 
 };
 
-class Game {
-	Player human;
-	Player computer;
-public:
-	Game() {
-		human = Player();
-		computer = Player();
-	}
-	Game(Player human, Player computer) {
-		this->human = human;
-		this->computer = computer;
-	}
-
-	void attack(int cardAttackerInd, int cardDefenderInd) {
-		if (human.turn.isTurn() && !computer.turn.isTurn()) { // if it's human turn
-			if (human.bf.isValidInd(cardAttackerInd) && computer.bf.isValidInd(cardDefenderInd)) {
-				if (computer.bf.isThereTaunts() == computer.bf.cardList[cardDefenderInd].getTaunt()) {
-					human.bf.cardList[cardAttackerInd].attackCard(&computer.bf.cardList[cardDefenderInd]);
-				}
-			}
-		}
-		else if (computer.turn.isTurn() && human.turn.isTurn()) { // if it's computer turn
-			if (computer.bf.isValidInd(cardAttackerInd) && human.bf.isValidInd(cardDefenderInd)) {
-				if (human.bf.isThereTaunts() == human.bf.cardList[cardDefenderInd].getTaunt()) {
-					computer.bf.cardList[cardAttackerInd].attackCard(&human.bf.cardList[cardDefenderInd]);
+// GENERAL FUNCTIONS
+void attack(Player * human, Player * computer, int cardAttackerInd, int cardDefenderInd) {
+	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
+		if ((*human).bf.isValidInd(cardAttackerInd) && (*computer).bf.isValidInd(cardDefenderInd)) {
+			if ((*human).bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if ((*computer).bf.isThereTaunts() == (*computer).bf.cardList[cardDefenderInd].getTaunt()) {
+					(*human).bf.cardList[cardAttackerInd].attackCard(&(*computer).bf.cardList[cardDefenderInd]);
+					(*human).bf.checkDead();
+					(*computer).bf.checkDead();
 				}
 			}
 		}
 	}
-
-	void endTurn(void) {
-		if (human.turn.isTurn() && !computer.turn.isTurn()) { // if it's human turn
-			human.endTurn();
-			computer.startTurn();
-		}
-		else if (computer.turn.isTurn() && !human.turn.isTurn()) { // if it's computer turn
-			computer.endTurn();
-			human.startTurn();
+	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
+		if ((*computer).bf.isValidInd(cardAttackerInd) && (*human).bf.isValidInd(cardDefenderInd)) {
+			if ((*computer).bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if ((*human).bf.isThereTaunts() == (*human).bf.cardList[cardDefenderInd].getTaunt()) {
+					(*computer).bf.cardList[cardAttackerInd].attackCard(&(*human).bf.cardList[cardDefenderInd]);
+					(*computer).bf.checkDead();
+					(*human).bf.checkDead();
+				}
+			}
 		}
 	}
+}
 
-};
+void attack(Player * human, Player * computer, int cardAttackerInd) {
+	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
+		if ((*human).bf.isValidInd(cardAttackerInd)) {
+			if ((*human).bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if ((*computer).bf.isThereTaunts() == false) {
+					(*computer).hero.setCurHP((*computer).hero.getCurHP() - (*human).bf.cardList[cardAttackerInd].getCurAttack());
+					(*human).bf.cardList[cardAttackerInd].setHasAttacked(true);
+				}
+			}
+		}
+	}
+	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
+		if ((*computer).bf.isValidInd(cardAttackerInd)) {
+			if ((*computer).bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if ((*human).bf.isThereTaunts() == false) {
+					(*human).hero.setCurHP((*human).hero.getCurHP() - (*computer).bf.cardList[cardAttackerInd].getCurAttack());
+					(*computer).bf.cardList[cardAttackerInd].setHasAttacked(true);
+				}
+			}
+		}
+	}
+}
+
+void endTurn(Player * human, Player * computer) {
+	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
+		(*human).endTurn();
+		(*computer).startTurn();
+	}
+	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
+		(*computer).endTurn();
+		(*human).startTurn();
+	}
+}
 
 int main(void) {
 	srand(time(NULL));
@@ -542,21 +603,30 @@ int main(void) {
 	//===============FONT
 	Font font;
 	font.loadFromFile("font/CyrilicOld.TTF");
+	Text heroNameEnemy("", font, 25);
 	Text hpEnemy("", font, 30);
 	Text curManaEnemy("", font, 25);
 	Text maxManaEnemy("", font, 25);
 	Text handEnemy("", font, 25);
 	Text deckEnemy("", font, 25);
+	Text heroNamePlayer("", font, 25);
 	Text hpPlayer("", font, 30);
 	Text curManaPlayer("", font, 25);
 	Text maxManaPlayer("", font, 25);
 	Text handPlayer("", font, 25);
 	Text deckPlayer("", font, 25);
+	Text bfTextPlayer[7];
+	for (int i = 0; i < 7; i++) {
+		bfTextPlayer[i] = Text("", font, 18);
+		bfTextPlayer[i].setString("ATTACK");
+	}
+	heroNameEnemy.setColor(Color::White);
 	hpEnemy.setColor(Color::Red);
 	curManaEnemy.setColor(Color::Cyan);
 	maxManaEnemy.setColor(Color::Blue);
 	handEnemy.setColor(Color::Green);
 	deckEnemy.setColor(Color::Yellow);
+	heroNamePlayer.setColor(Color::White);
 	hpPlayer.setColor(Color::Red);
 	curManaPlayer.setColor(Color::Cyan);
 	maxManaPlayer.setColor(Color::Blue);
@@ -575,7 +645,7 @@ int main(void) {
 	//===============FONT_END
 
 	//===============DECK_INIT
-	sf::String allNames[ALL_CARDS] = {
+	std::string allNames[16] = {
 		"bloodfenRaptor.png",
 		"bootyBayBodyguard.png",
 		"boulderfistOgre.png",
@@ -594,66 +664,94 @@ int main(void) {
 		"warGolem.png"
 	};
 	MinionCard allCards[ALL_CARDS];
+
 	Picture picBuff = Picture(allNames[0], 0, 0, 286, 395);
 	MinionCard minionBuff = MinionCard(picBuff, "Bloodfen Raptor", 3, 2, 2, false);
 	allCards[0] = minionBuff;
-	picBuff = Picture(allNames[1], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Booty Bay Bodyguard", 5, 4, 5, true);
+
+	Picture picBuff2 = Picture(allNames[1], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff2, "Booty Bay Bodyguard", 5, 4, 5, true);
 	allCards[1] = minionBuff;
-	picBuff = Picture(allNames[2], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Boulderfist Ogre", 6, 7, 6, false);
+
+	Picture picBuff3 = Picture(allNames[2], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff3, "Boulderfist Ogre", 6, 7, 6, false);
 	allCards[2] = minionBuff;
-	picBuff = Picture(allNames[3], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Chillwind Yeti", 4, 5, 4, false);
+
+	Picture picBuff4 = Picture(allNames[3], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff4, "Chillwind Yeti", 4, 5, 4, false);
 	allCards[3] = minionBuff;
-	picBuff = Picture(allNames[4], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Core Hound", 9, 5, 7, false);
+
+	Picture picBuff5 = Picture(allNames[4], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff5, "Core Hound", 9, 5, 7, false);
 	allCards[4] = minionBuff;
-	picBuff = Picture(allNames[5], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Frostwolf Grunt", 2, 2, 2, true);
+
+	Picture picBuff6 = Picture(allNames[5], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff6, "Frostwolf Grunt", 2, 2, 2, true);
 	allCards[5] = minionBuff;
-	picBuff = Picture(allNames[6], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Goldshire Footman", 1, 2, 1, true);
+
+	Picture picBuff7 = Picture(allNames[6], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff7, "Goldshire Footman", 1, 2, 1, true);
 	allCards[6] = minionBuff;
-	picBuff = Picture(allNames[7], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Ironfur Grizzly", 3, 3, 3, true);
+
+	Picture picBuff8 = Picture(allNames[7], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff8, "Ironfur Grizzly", 3, 3, 3, true);
 	allCards[7] = minionBuff;
-	picBuff = Picture(allNames[8], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Lord of the Arena", 6, 5, 6, true);
+
+	Picture picBuff9 = Picture(allNames[8], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff9, "Lord of the Arena", 6, 5, 6, true);
 	allCards[8] = minionBuff;
-	picBuff = Picture(allNames[9], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Magma Rager", 5, 1, 3, false);
+
+	Picture picBuff10 = Picture(allNames[9], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff10, "Magma Rager", 5, 1, 3, false);
 	allCards[9] = minionBuff;
-	picBuff = Picture(allNames[10], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Murloc Raider", 2, 1, 1, false);
+
+	Picture picBuff11 = Picture(allNames[10], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff11, "Murloc Raider", 2, 1, 1, false);
 	allCards[10] = minionBuff;
-	picBuff = Picture(allNames[11], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Oasis Snapjaw", 2, 7, 4, false);
+
+	Picture picBuff12 = Picture(allNames[11], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff12, "Oasis Snapjaw", 2, 7, 4, false);
 	allCards[11] = minionBuff;
-	picBuff = Picture(allNames[12], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "River Crocolisk", 2, 3, 2, false);
+
+	Picture picBuff13 = Picture(allNames[12], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff13, "River Crocolisk", 2, 3, 2, false);
 	allCards[12] = minionBuff;
-	picBuff = Picture(allNames[13], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Sen'jin Shieldmasta", 3, 5, 4, true);
+
+	Picture picBuff14 = Picture(allNames[13], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff14, "Sen'jin Shieldmasta", 3, 5, 4, true);
 	allCards[13] = minionBuff;
-	picBuff = Picture(allNames[14], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "Silverback Patriarch", 1, 4, 3, true);
+
+	Picture picBuff15 = Picture(allNames[14], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff15, "Silverback Patriarch", 1, 4, 3, true);
 	allCards[14] = minionBuff;
-	picBuff = Picture(allNames[15], 0, 0, 286, 395);
-	minionBuff = MinionCard(picBuff, "War Golem", 7, 7, 7, false);
+
+	Picture picBuff16 = Picture(allNames[15], 0, 0, 286, 395);
+	minionBuff = MinionCard(picBuff16, "War Golem", 7, 7, 7, false);
 	allCards[15] = minionBuff;
 
-	Player human = Player();
-	Player comp = Player();
+	//===============PLAYER_INIT
+	Picture picBuffHuman = Picture("jaina.png", 0, 0, 200, 200);
+	Player human = Player("Jaina", picBuffHuman);
+	human.hero.pic.sprite.setScale(0.48, 0.48);
+	Picture picBuffComp = Picture("jaina.png", 0, 0, 200, 200);
+	Player comp = Player("Jaina", picBuffComp);
+	comp.hero.pic.sprite.setScale(0.48, 0.48);
+	//===============PLAYER_INIT_END
+
 	human.deck.prepare(allCards);
 	comp.deck.prepare(allCards);
 	//===============DECK_INIT_END
 
-
+	//===============TIMER
+	float keyPressedTimer = 0;
+	clock.restart();
+	//===============TIMER_END
 	while (window.isOpen()) { //MAIN CYCLE OF SFML
-		float time = clock.getElapsedTime().asMicroseconds(); //receiving passed time (in ms)
+
+		float time = clock.getElapsedTime().asMilliseconds(); //receiving passed time (in ms)
 		clock.restart(); //restarting clock
-						 //std::cout << time << "\n"; //showing the time passed in console
+		keyPressedTimer += time;
+		//std::cout << keyPressedTimer << "\n"; //showing the time passed in console
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -682,25 +780,66 @@ int main(void) {
 			}
 		}
 
-		// draw cards (enemy bf, human bf, human hand)
+		if (keyPressedTimer > 2000) {
+			if (Keyboard::isKeyPressed(Keyboard::K)) {
+				human.startTurn();
+				human.playCard(0);
+				attack(&human, &comp, 0, 0);
+				human.endTurn();
+				comp.startTurn();
+				comp.playCard(0);
+				comp.endTurn();
+				keyPressedTimer = 0;
+			}
+		}
+
+		// draw cards (enemy bf, human bf (with attack state: text), human hand)
 		for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
 			comp.bf.cardList[i].pic.sprite.setPosition(192 * i, 160);
 			window.draw(comp.bf.cardList[i].pic.sprite);
 		}
 		for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
 			human.bf.cardList[i].pic.sprite.setPosition(192 * i, 320);
+			if (human.bf.cardList[i].hasAttacked() == false) {
+				bfTextPlayer[i].setColor(Color::Green);
+			}
+			else {
+				bfTextPlayer[i].setColor(Color::Red);
+			}
+			bfTextPlayer[i].setPosition(192 * i + 62, 452);
 			window.draw(human.bf.cardList[i].pic.sprite);
+			window.draw(bfTextPlayer[i]);
 		}
 		for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
 			human.hand.cardList[i].pic.sprite.setPosition(128 * (i + 1), 480);
 			window.draw(human.hand.cardList[i].pic.sprite);
 		}
 
-		// draw text: hp/mana/cards
+		// draw hero: portrait / name
 		ostringstream buff;
 		// enemy
+		comp.hero.pic.sprite.setPosition(32, 32);
+		window.draw(comp.hero.pic.sprite);
+
 		buff.str("");
-		buff << "30";
+		buff << comp.hero.getName();
+		heroNameEnemy.setString("" + buff.str());
+		heroNameEnemy.setPosition(32, 0);
+		window.draw(heroNameEnemy);
+		// human
+		human.hero.pic.sprite.setPosition(32, 512);
+		window.draw(human.hero.pic.sprite);
+
+		buff.str("");
+		buff << human.hero.getName();
+		heroNamePlayer.setString("" + buff.str());
+		heroNamePlayer.setPosition(32, 480);
+		window.draw(heroNamePlayer);
+
+		// draw text: hp/mana/cards
+		// enemy
+		buff.str("");
+		buff << comp.hero.getCurHP();
 		hpEnemy.setString("" + buff.str());
 		hpEnemy.setPosition(0, 0);
 
@@ -725,7 +864,7 @@ int main(void) {
 		deckEnemy.setPosition(96, 128);
 		// human
 		buff.str("");
-		buff << "30";
+		buff << human.hero.getCurHP();
 		hpPlayer.setString("" + buff.str());
 		hpPlayer.setPosition(0, 480);
 
@@ -761,15 +900,6 @@ int main(void) {
 		window.draw(deckPlayer);
 
 		window.display();		//display all the window.draw's
-		human.startTurn();
-		comp.startTurn();
-		char a;
-		do {
-			a = getch();
-			printf("%c", a);
-		} while (a != 'k');
-		human.playCard(0);
-		comp.playCard(0);
 	}
 	// end of program
 	return 0;
