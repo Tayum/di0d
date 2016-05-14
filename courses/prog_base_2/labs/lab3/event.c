@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <Windows.h>
 
-#include "event.h"
-#include "user.h"
 #include "alert.h"
+#include "event.h"
 
 // max amount of users that are able to be subscribed to the same event at the same time
 #define USERS_MAXSIZE 100
@@ -69,7 +69,8 @@ void event_addAlertSeveral(user_t ** userArray, int userSize, event_t * evPtr, a
 // function that triggers the event. Each subscriber (user) from alert_array (user_t * receiver)
 // is being notified with the special message: "desc" in event_s struct
 // and he reacts on the event trigger with his alert function from alert_array (alert func)
-void event_trigger(event_t * self) {
+// this function is HIDDEN FROM USER, so ITS STATIC!
+static void event_trigger(event_t * self) {
 	event_t * event = self;
 	int size = alertArr_getSize(self->alert_array);
 	for (int i = 0; i < size; i++) {
@@ -78,3 +79,115 @@ void event_trigger(event_t * self) {
 	}
 }
 
+// function that calls event_trigger function if (for first event)
+// the condition (for first event) is satisfied.
+// It also returns some of DEFINEs (from queue.h) to handle the
+// behaviour of the program in function below (check event_start)
+//
+// this function is HIDDEN FROM USER, so ITS STATIC!
+static int event_firstEvent(event_t * self, queue_t * queuePtr) {
+	if (queue_firstEvent(queuePtr) == DATA) {
+		return DATA;
+	}
+	else if (queue_firstEvent(queuePtr) == NO) {
+		return NO;
+	}
+	else {
+		puts("\n==========FIRST EVENT TAKES PLACE!!!==========\n");
+		event_trigger(self);
+	}
+}
+
+// function that calls event_trigger function if (for second event)
+// the condition (for second event) is satisfied.
+// It also returns some of DEFINEs (from queue.h) to handle the
+// behaviour of the program in function below (check event_start)
+//
+// this function is HIDDEN FROM USER, so ITS STATIC!
+static int event_secondEvent(event_t * self, queue_t * queuePtr) {
+	if (queue_secondEvent(queuePtr) == DATA) {
+		return DATA;
+	}
+	else if (queue_secondEvent(queuePtr) == NO) {
+		return NO;
+	}
+	else {
+		puts("\n==========SECOND EVENT TAKES PLACE!!!==========\n");
+		event_trigger(self);
+	}
+}
+
+// function that calls event_trigger function (for third event)
+// if the condition (for third event) is satisfied.
+// It also returns some of DEFINEs (from queue.h) to handle the
+// behaviour of the program in function below (check event_start)
+//
+// this function is HIDDEN FROM USER, so ITS STATIC!
+static int event_thirdEvent(event_t * self, queue_t * queuePtr) {
+	if (queue_thirdEvent(queuePtr) == DATA) {
+		return DATA;
+	}
+	else if (queue_thirdEvent(queuePtr) == NO) {
+		return NO;
+	}
+	else {
+		puts("\n==========THIRD EVENT TAKES PLACE!!!==========\n");
+		event_trigger(self);
+	}
+}
+
+// MAIN function of our program that is DEFINED IN userFunc.h (and therefore in main.c)
+// Controls the behaviour (printing to console, Sleep() and other) of main cycle of our program
+// The cycle is next: enqueue, checking on first, second, third event and go on again
+//
+// if the condition for some event is fulfilled - the event_trigger from corresponding function
+// (see 3 functions above) is called.
+// for other occasions (for example, when there is no enough data or the condition is NOT satisfied) -
+// this function prints the appropriate message.
+void event_start(event_t * firstEv, event_t * secondEv, event_t * thirdEv, queue_t * queuePtr) {
+	puts("\n====================NEW MEASURMENT====================\n");
+	queue_enqueueRand(queuePtr);
+	int check;
+
+	Sleep(1000);
+	check = event_firstEvent(firstEv, queuePtr);
+	if (check == DATA || check == NO) {
+		puts("\nFirst event:\n");
+
+		if (check == DATA) {
+			puts("NO DATA FOR FIRST EVENT!");
+		}
+		else if (check == NO) {
+			puts("Nothing special in first event...");
+		}
+	}
+
+	Sleep(1000);
+	check = event_secondEvent(secondEv, queuePtr);
+	if (check == DATA || check == NO) {
+		puts("\nSecond event:\n");
+
+		if (check == DATA) {
+			puts("NO DATA FOR SECOND EVENT!");
+		}
+		else if (check == NO) {
+			puts("Nothing special in second event...");
+		}
+	}
+
+	Sleep(1000);
+	check = event_thirdEvent(thirdEv, queuePtr);
+	if (check == DATA || check == NO) {
+		puts("\nThird event:\n");
+
+		if (check == DATA) {
+			puts("NO DATA FOR THIRD EVENT!");
+		}
+		else if (check == NO) {
+			puts("Nothing special in third event...");
+		}
+	}
+
+	Sleep(1000);
+	puts("\n\n");
+}

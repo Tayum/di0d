@@ -2,11 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <conio.h>
-#include <Windows.h>
 
-#include "queue.h"
-#include "user.h"
-#include "event.h"
+#include "userFunc.h"
 #include "cmockaTest.h"
 
 // first variation of callback function for ruslan user as the master user
@@ -44,60 +41,8 @@ int main(void) {
 	// subscribing other users including ruslan (for the third event) with alert_common callback function
 	event_addAlertSeveral(userArr, userArrSize, thirdEvent, alert_common);
 	// main cycle of the program. To break it, press ANY KEY
-	int check;
 	while (!kbhit()) {
-		// creating new measurement
-		puts("********************THE NEW MEASUREMENT HAS BEEN TAKEN********************\n");
-		Sleep(1000);
-		queue_enqueueRand(msrmQueue);
-
-		// checking condition of first event
-		check = queue_firstEvent(msrmQueue);
-		puts("==========FIRST EVENT==========\n");
-		if (check == DATA) {
-			puts("Not enough data for the event yet...\n");
-		}
-		else if (check == YES) {
-			// if the condition is fulfilled - the event is triggered for the subscriber (ruslan)
-			event_trigger(firstEvent);
-		}
-		else {
-			puts("Nothing special happened...\n");
-		}
-		puts("===============================\n");
-		Sleep(1000);
-
-		// checking condition of second event
-		check = queue_secondEvent(msrmQueue);
-		puts("==========SECOND EVENT==========\n");
-		if (check == DATA) {
-			puts("Not enough data for the event yet...\n");
-		}
-		else if (check == YES) {
-			// if the condition is fulfilled - the event is triggered for the subscriber (ruslan)
-			event_trigger(secondEvent);
-		}
-		else {
-			puts("Nothing special happened...\n");
-		}
-		puts("================================\n");
-		Sleep(1000);
-
-		// checking condition of third event
-		check = queue_thirdEvent(msrmQueue);
-		puts("==========THIRD EVENT==========\n");
-		if (check == DATA) {
-			puts("Not enough data for the event yet...\n");
-		}
-		else if (check == YES) {
-			// if the condition is fulfilled - the event is triggered for the subscribers (all users including ruslan)
-			event_trigger(thirdEvent);
-		}
-		else {
-			puts("Nothing special happened...\n");
-		}
-		puts("================================\n");
-		Sleep(1000);
+		event_start(firstEvent, secondEvent, thirdEvent, msrmQueue);
 	}
 
 	// freeing events (and alerts)
