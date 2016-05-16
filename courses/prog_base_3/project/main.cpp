@@ -12,6 +12,12 @@
 
 #define ALL_CARDS 16
 
+typedef enum {
+	HAND = 1,
+	BF,
+	HERO
+} clickType;
+
 using namespace std;
 using namespace sf;
 
@@ -488,7 +494,7 @@ public:
 	Battlefield bf;
 	Turn turn;
 	Hero hero;
-				// add hero!
+
 	Player(std::string heroName, Picture heroPic)
 		: deck(), hand(), bf(), hero(heroName, heroPic) {
 		//deck = Deck();
@@ -536,24 +542,24 @@ public:
 
 // GENERAL FUNCTIONS
 void attack(Player * human, Player * computer, int cardAttackerInd, int cardDefenderInd) {
-	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
-		if ((*human).bf.isValidInd(cardAttackerInd) && (*computer).bf.isValidInd(cardDefenderInd)) {
-			if ((*human).bf.cardList[cardAttackerInd].hasAttacked() == false) {
-				if ((*computer).bf.isThereTaunts() == (*computer).bf.cardList[cardDefenderInd].getTaunt()) {
-					(*human).bf.cardList[cardAttackerInd].attackCard(&(*computer).bf.cardList[cardDefenderInd]);
-					(*human).bf.checkDead();
-					(*computer).bf.checkDead();
+	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
+		if (human->bf.isValidInd(cardAttackerInd) && computer->bf.isValidInd(cardDefenderInd)) {
+			if (human->bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if (computer->bf.isThereTaunts() == computer->bf.cardList[cardDefenderInd].getTaunt()) {
+					human->bf.cardList[cardAttackerInd].attackCard(&computer->bf.cardList[cardDefenderInd]);
+					human->bf.checkDead();
+					computer->bf.checkDead();
 				}
 			}
 		}
 	}
-	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
-		if ((*computer).bf.isValidInd(cardAttackerInd) && (*human).bf.isValidInd(cardDefenderInd)) {
-			if ((*computer).bf.cardList[cardAttackerInd].hasAttacked() == false) {
-				if ((*human).bf.isThereTaunts() == (*human).bf.cardList[cardDefenderInd].getTaunt()) {
-					(*computer).bf.cardList[cardAttackerInd].attackCard(&(*human).bf.cardList[cardDefenderInd]);
-					(*computer).bf.checkDead();
-					(*human).bf.checkDead();
+	else if (computer->turn.isTurn() && !human->turn.isTurn()) { // if it's computer turn
+		if (computer->bf.isValidInd(cardAttackerInd) && human->bf.isValidInd(cardDefenderInd)) {
+			if (computer->bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if (human->bf.isThereTaunts() == human->bf.cardList[cardDefenderInd].getTaunt()) {
+					computer->bf.cardList[cardAttackerInd].attackCard(&human->bf.cardList[cardDefenderInd]);
+					computer->bf.checkDead();
+					human->bf.checkDead();
 				}
 			}
 		}
@@ -561,22 +567,22 @@ void attack(Player * human, Player * computer, int cardAttackerInd, int cardDefe
 }
 
 void attack(Player * human, Player * computer, int cardAttackerInd) {
-	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
-		if ((*human).bf.isValidInd(cardAttackerInd)) {
-			if ((*human).bf.cardList[cardAttackerInd].hasAttacked() == false) {
-				if ((*computer).bf.isThereTaunts() == false) {
-					(*computer).hero.setCurHP((*computer).hero.getCurHP() - (*human).bf.cardList[cardAttackerInd].getCurAttack());
-					(*human).bf.cardList[cardAttackerInd].setHasAttacked(true);
+	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
+		if (human->bf.isValidInd(cardAttackerInd)) {
+			if (human->bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if (computer->bf.isThereTaunts() == false) {
+					computer->hero.setCurHP(computer->hero.getCurHP() - human->bf.cardList[cardAttackerInd].getCurAttack());
+					human->bf.cardList[cardAttackerInd].setHasAttacked(true);
 				}
 			}
 		}
 	}
-	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
-		if ((*computer).bf.isValidInd(cardAttackerInd)) {
-			if ((*computer).bf.cardList[cardAttackerInd].hasAttacked() == false) {
-				if ((*human).bf.isThereTaunts() == false) {
-					(*human).hero.setCurHP((*human).hero.getCurHP() - (*computer).bf.cardList[cardAttackerInd].getCurAttack());
-					(*computer).bf.cardList[cardAttackerInd].setHasAttacked(true);
+	else if (computer->turn.isTurn() && !human->turn.isTurn()) { // if it's computer turn
+		if (computer->bf.isValidInd(cardAttackerInd)) {
+			if (computer->bf.cardList[cardAttackerInd].hasAttacked() == false) {
+				if (human->bf.isThereTaunts() == false) {
+					human->hero.setCurHP(human->hero.getCurHP() - computer->bf.cardList[cardAttackerInd].getCurAttack());
+					computer->bf.cardList[cardAttackerInd].setHasAttacked(true);
 				}
 			}
 		}
@@ -584,13 +590,13 @@ void attack(Player * human, Player * computer, int cardAttackerInd) {
 }
 
 void endTurn(Player * human, Player * computer) {
-	if ((*human).turn.isTurn() && !(*computer).turn.isTurn()) { // if it's human turn
-		(*human).endTurn();
-		(*computer).startTurn();
+	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
+		human->endTurn();
+		computer->startTurn();
 	}
-	else if ((*computer).turn.isTurn() && !(*human).turn.isTurn()) { // if it's computer turn
-		(*computer).endTurn();
-		(*human).startTurn();
+	else if (computer->turn.isTurn() && !human->turn.isTurn()) { // if it's computer turn
+		computer->endTurn();
+		human->startTurn();
 	}
 }
 
@@ -603,7 +609,7 @@ int main(void) {
 	//===============FONT
 	Font font;
 	font.loadFromFile("font/CyrilicOld.TTF");
-	Text heroNameEnemy("", font, 25);
+	Text heroNameEnemy("", font, 20); // 25
 	Text hpEnemy("", font, 30);
 	Text curManaEnemy("", font, 25);
 	Text maxManaEnemy("", font, 25);
@@ -620,6 +626,17 @@ int main(void) {
 		bfTextPlayer[i] = Text("", font, 18);
 		bfTextPlayer[i].setString("ATTACK");
 	}
+	Text bfHPTextPlayer[7];
+	Text bfHPTextEnemy[7];
+	for (int i = 0; i < 7; i++) {
+		bfHPTextPlayer[i] = Text("", font, 38);
+		bfHPTextPlayer[i].setColor(Color::Red);
+		bfHPTextPlayer[i].setStyle(Text::Bold);
+		bfHPTextEnemy[i] = Text("", font, 38);
+		bfHPTextEnemy[i].setColor(Color::Red);
+		bfHPTextPlayer[i].setStyle(Text::Bold);
+	}
+	
 	heroNameEnemy.setColor(Color::White);
 	hpEnemy.setColor(Color::Red);
 	curManaEnemy.setColor(Color::Cyan);
@@ -733,8 +750,8 @@ int main(void) {
 	Picture picBuffHuman = Picture("jaina.png", 0, 0, 200, 200);
 	Player human = Player("Jaina", picBuffHuman);
 	human.hero.pic.sprite.setScale(0.48, 0.48);
-	Picture picBuffComp = Picture("jaina.png", 0, 0, 200, 200);
-	Player comp = Player("Jaina", picBuffComp);
+	Picture picBuffComp = Picture("guldan.png", 0, 0, 200, 200);
+	Player comp = Player("Gul'dan", picBuffComp);
 	comp.hero.pic.sprite.setScale(0.48, 0.48);
 	//===============PLAYER_INIT_END
 
@@ -746,6 +763,14 @@ int main(void) {
 	float keyPressedTimer = 0;
 	clock.restart();
 	//===============TIMER_END
+
+	//===============MOUSE CONTROL
+	bool isClicked = false;
+	clickType type = HAND;
+	int indFirstClick = 0;
+	Vector2i mouseClickPos;
+	//===============MOUSE CONTROL_END
+
 	while (window.isOpen()) { //MAIN CYCLE OF SFML
 
 		float time = clock.getElapsedTime().asMilliseconds(); //receiving passed time (in ms)
@@ -755,8 +780,82 @@ int main(void) {
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) // if "close" button is clicked - close window
+
+			if (event.type == sf::Event::Closed) { // if "close" button is clicked - close window
 				window.close();
+			}
+			if (event.type == Event::MouseButtonPressed && human.turn.isTurn()) {
+				if (event.key.code == Mouse::Left) { // (LMB)
+					mouseClickPos = Mouse::getPosition(window);
+					// IF THE BUTTON WAS NOT CLICKED BEFORE!
+					if (!isClicked) {
+						//std::cout << mouseClickPos.x << "\n"; //x coord to console
+
+						// CLICK FOR HAND (PLAYER)!
+						for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
+							if (human.hand.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+								//std::cout << "Clicked the hand sprite (first click)!\n"; // print to console the msg about it
+								indFirstClick = i;
+								type = HAND;
+								isClicked = true;
+								break;
+							}
+						}
+						// CLICK FOR BATTLEFIELD (PLAYER)!
+						for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
+							if (human.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+								//std::cout << "Clicked the bf sprite (first click)!\n"; // print to console the msg about it
+								indFirstClick = i;
+								type = BF;
+								isClicked = true;
+								break;
+							}
+						}
+					}
+
+					// IF THE BUTTON WAS CLICKED BEFORE!
+					if (isClicked) {
+						//std::cout << mouseClickPos.x << "\n"; //x coord to console
+						if (type == HAND) {
+							// CLICK FOR BF (PLAYER)!
+							for (int i = 0; i < 7; i++) {
+								if (human.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+									//std::cout << "Clicked the bf sprite (player) (second click)!\n"; // print to console the msg about it
+									human.playCard(indFirstClick);
+									isClicked = false;
+									break;
+								}
+							}
+						}
+						if (type == BF) {
+							// CLICK FOR BF (ENEMY)!
+							for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+								if (comp.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+									//std::cout << "Clicked the bf sprite (enemy) (second click)!\n"; // print to console the msg about it
+									attack(&human, &comp, indFirstClick, i);
+									isClicked = false;
+									break;
+								}
+							}
+							// CLICK FOR HERO (ENEMY)!
+							if (comp.hero.pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+								//std::cout << "Clicked the hero sprite!\n"; // print to console the msg about it
+								attack(&human, &comp, indFirstClick);
+								isClicked = false; // we can move sprite
+							}
+						}
+					}
+
+				}
+
+				if (event.key.code == Mouse::Right) { // (RMB)
+					if (isClicked) {
+						isClicked = false;
+					}
+				}
+
+			}
+
 		}
 		window.clear(); // clear all the window
 
@@ -783,9 +882,10 @@ int main(void) {
 		if (keyPressedTimer > 2000) {
 			if (Keyboard::isKeyPressed(Keyboard::K)) {
 				human.startTurn();
-				human.playCard(0);
-				attack(&human, &comp, 0, 0);
-				human.endTurn();
+				isClicked = false;
+				//human.playCard(0);
+				//attack(&human, &comp, 0, 0);
+				//human.endTurn();
 				comp.startTurn();
 				comp.playCard(0);
 				comp.endTurn();
@@ -793,13 +893,22 @@ int main(void) {
 			}
 		}
 
-		// draw cards (enemy bf, human bf (with attack state: text), human hand)
+		// draw cards (enemy bf, human bf (with attack state: text, curHP: text), human hand)
+		ostringstream buff;
 		for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
 			comp.bf.cardList[i].pic.sprite.setPosition(192 * i, 160);
 			window.draw(comp.bf.cardList[i].pic.sprite);
+
+			buff.str("");
+			buff << comp.bf.cardList[i].getCurHealth();
+			bfHPTextEnemy[i].setString("" + buff.str());
+			bfHPTextEnemy[i].setPosition(192 * i + 158, 278);
+			window.draw(bfHPTextEnemy[i]);
 		}
 		for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
 			human.bf.cardList[i].pic.sprite.setPosition(192 * i, 320);
+			window.draw(human.bf.cardList[i].pic.sprite);
+
 			if (human.bf.cardList[i].hasAttacked() == false) {
 				bfTextPlayer[i].setColor(Color::Green);
 			}
@@ -807,8 +916,13 @@ int main(void) {
 				bfTextPlayer[i].setColor(Color::Red);
 			}
 			bfTextPlayer[i].setPosition(192 * i + 62, 452);
-			window.draw(human.bf.cardList[i].pic.sprite);
 			window.draw(bfTextPlayer[i]);
+
+			buff.str("");
+			buff << human.bf.cardList[i].getCurHealth();
+			bfHPTextPlayer[i].setString("" + buff.str());
+			bfHPTextPlayer[i].setPosition(192 * i + 158, 438);
+			window.draw(bfHPTextPlayer[i]);
 		}
 		for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
 			human.hand.cardList[i].pic.sprite.setPosition(128 * (i + 1), 480);
@@ -816,7 +930,6 @@ int main(void) {
 		}
 
 		// draw hero: portrait / name
-		ostringstream buff;
 		// enemy
 		comp.hero.pic.sprite.setPosition(32, 32);
 		window.draw(comp.hero.pic.sprite);
