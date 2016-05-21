@@ -188,10 +188,11 @@ sent_t * text_sortWords(text_t * self) {
 		int wordsAmount = list_getSize(sent->wordList);
 		for (int j = 0; j < wordsAmount; j++) {
 			word_t * newWord = (word_t *)list_pop_back(sent->wordList);
-				for (int k = 0; k <= list_getSize(allWords->wordList); k++) {
-					if (k == list_getSize(allWords->wordList)) {
-						list_push_back(allWords->wordList, newWord);
-					}
+			for (int k = 0; k <= list_getSize(allWords->wordList); k++) {
+				if (k == list_getSize(allWords->wordList)) {
+					list_push_back(allWords->wordList, newWord);
+					break;
+				}
 				word_t * curWord = (word_t *)list_get(allWords->wordList, k);
 				if (newWord->length <= curWord->length) {
 					list_insert(allWords->wordList, k, newWord);
@@ -215,7 +216,7 @@ int file_writeWordsToFile(sent_t * self, const char * fwName) {
 	int wordsAmount = list_getSize(self->wordList);
 	for (int i = 0; i < wordsAmount; i++) {
 		curWord = (word_t *)list_pop_back(self->wordList);
-		fprintf(fwPtr, "%s\n", curWord->word);	
+		fprintf(fwPtr, "%s\n", curWord->word);
 	}
 	word_free(curWord);
 	fclose(fwPtr);
