@@ -15,7 +15,8 @@
 typedef enum {
 	HAND = 1,
 	BF,
-	HERO
+	HERO,
+	HERO_POWER
 } clickType;
 
 using namespace std;
@@ -252,10 +253,18 @@ public:
 	bool isEnough(MinionCard card) {
 		return curMana >= card.getManacost();
 	}
+	bool isEnough(int reqMana) {
+		return curMana >= reqMana;
+	}
 
 	void useCard(MinionCard card) {
 		if (isEnough(card)) {
 			curMana -= card.getManacost();
+		}
+	}
+	void useHeroPower(void) {
+		if (isEnough(2)) {
+			curMana -= 2;
 		}
 	}
 
@@ -443,12 +452,13 @@ class Hero {
 	static const int MAX_HP = 30;
 	int curHP;
 	std::string name;
-	// add hero ability?
+	bool usedHeroPower;
 public:
 	Picture pic;
 
 	Hero(std::string name, Picture pic) {
 		curHP = MAX_HP;
+		usedHeroPower = false;
 		this->name = name;
 		this->pic = pic;
 	}
@@ -463,6 +473,14 @@ public:
 
 	void setCurHP(int newHP) {
 		curHP = newHP;
+	}
+
+	bool hasUsedHeroPower(void) {
+		return usedHeroPower;
+	}
+
+	void setHasUsedHeroPower(bool hasUsedHeroPower) {
+		usedHeroPower = hasUsedHeroPower;
 	}
 
 };
@@ -531,6 +549,7 @@ public:
 		for (int i = 0; i < bf.getCurCardAmount(); i++) {
 			bf.cardList[i].setHasAttacked(false);
 		}
+		hero.setHasUsedHeroPower(false);
 		drawCard();
 	}
 
@@ -589,6 +608,54 @@ void attack(Player * human, Player * computer, int cardAttackerInd) {
 	}
 }
 
+void useHeroPower(Player * human, Player * computer) {
+	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
+		if (human->hero.hasUsedHeroPower() == false) {
+			if (human->hand.mana.isEnough(2)) {
+				human->hand.mana.useHeroPower();
+				computer->hero.setCurHP(computer->hero.getCurHP() - 1);
+				human->hero.setHasUsedHeroPower(true);
+			}
+		}
+	}
+	else if (computer->turn.isTurn() && !human->turn.isTurn()) { // if it's computer turn
+		if (computer->hero.hasUsedHeroPower() == false) {
+			if (computer->hand.mana.isEnough(2)) {
+				computer->hand.mana.useHeroPower();
+				human->hero.setCurHP(human->hero.getCurHP() - 1);
+				computer->hero.setHasUsedHeroPower(true);
+			}
+		}
+	}
+}
+
+void useHeroPower(Player * human, Player * computer, int cardDefenderInd) {
+	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
+		if (computer->bf.isValidInd(cardDefenderInd)) {
+			if (human->hero.hasUsedHeroPower() == false) {
+				if (human->hand.mana.isEnough(2)) {
+					human->hand.mana.useHeroPower();
+					computer->bf.cardList[cardDefenderInd].setCurHealth(computer->bf.cardList[cardDefenderInd].getCurHealth() - 1);
+					computer->bf.checkDead();
+					human->hero.setHasUsedHeroPower(true);
+				}
+			}
+		}
+	}
+	else if (computer->turn.isTurn() && !human->turn.isTurn()) { // if it's computer turn
+		if (human->bf.isValidInd(cardDefenderInd)) {
+			if (computer->hero.hasUsedHeroPower() == false) {
+				if (computer->hand.mana.isEnough(2)) {
+					computer->hand.mana.useHeroPower();
+					human->bf.cardList[cardDefenderInd].setCurHealth(human->bf.cardList[cardDefenderInd].getCurHealth() - 1);
+					human->bf.checkDead();
+					computer->hero.setHasUsedHeroPower(true);
+				}
+			}
+		}
+	}
+}
+
 void endTurn(Player * human, Player * computer) {
 	if (human->turn.isTurn() && !computer->turn.isTurn()) { // if it's human turn
 		human->endTurn();
@@ -609,7 +676,7 @@ int main(void) {
 	//===============FONT
 	Font font;
 	font.loadFromFile("font/CyrilicOld.TTF");
-	Text heroNameEnemy("", font, 20); // 25
+	Text heroNameEnemy("", font, 20); // 25 for Jaina
 	Text hpEnemy("", font, 30);
 	Text curManaEnemy("", font, 25);
 	Text maxManaEnemy("", font, 25);
@@ -634,7 +701,7 @@ int main(void) {
 		bfHPTextPlayer[i].setStyle(Text::Bold);
 		bfHPTextEnemy[i] = Text("", font, 38);
 		bfHPTextEnemy[i].setColor(Color::Red);
-		bfHPTextPlayer[i].setStyle(Text::Bold);
+		bfHPTextEnemy[i].setStyle(Text::Bold);
 	}
 	
 	heroNameEnemy.setColor(Color::White);
@@ -745,6 +812,13 @@ int main(void) {
 	Picture picBuff16 = Picture(allNames[15], 0, 0, 286, 395);
 	minionBuff = MinionCard(picBuff16, "War Golem", 7, 7, 7, false);
 	allCards[15] = minionBuff;
+	// END TURN BUTTON
+	Picture endTurnButton = Picture("endTurn3.png", 0, 0, 160, 160);
+	endTurnButton.sprite.setPosition(1184, 0);
+	// HERO POWER
+	Picture fireblast = Picture("fireblast.png", 0, 0, 286, 395);
+	fireblast.sprite.setScale(0.447, 0.405);
+	fireblast.sprite.setPosition(1056, 0);
 
 	//===============PLAYER_INIT
 	Picture picBuffHuman = Picture("jaina.png", 0, 0, 200, 200);
@@ -784,33 +858,55 @@ int main(void) {
 			if (event.type == sf::Event::Closed) { // if "close" button is clicked - close window
 				window.close();
 			}
-			if (event.type == Event::MouseButtonPressed && human.turn.isTurn()) {
+			if (event.type == Event::MouseButtonPressed) { // && human.turn.isTurn()
 				if (event.key.code == Mouse::Left) { // (LMB)
 					mouseClickPos = Mouse::getPosition(window);
+
+					// END TURN BUTTON CLICK
+					if (endTurnButton.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+						human.startTurn();
+						isClicked = false;
+						comp.startTurn();
+						comp.playCard(0);
+						comp.endTurn();
+						//endTurn(&human, &comp);
+					}
+
 					// IF THE BUTTON WAS NOT CLICKED BEFORE!
 					if (!isClicked) {
 						//std::cout << mouseClickPos.x << "\n"; //x coord to console
+						// CLICK FOR HERO POWER!
+						if (fireblast.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+							type = HERO_POWER;
+							isClicked = true;
+						}
+						else {
+							// CLICK FOR HAND (PLAYER)!
+							if (!isClicked) {
+								for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
+									if (human.hand.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+										//std::cout << "Clicked the hand sprite (first click)!\n"; // print to console the msg about it
+										indFirstClick = i;
+										type = HAND;
+										isClicked = true;
+										break;
+									}
+								}
+							}
+							if (!isClicked) {
+								// CLICK FOR BATTLEFIELD (PLAYER)!
+								for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
+									if (human.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+										//std::cout << "Clicked the bf sprite (first click)!\n"; // print to console the msg about it
+										indFirstClick = i;
+										type = BF;
+										isClicked = true;
+										break;
+									}
+								}
+							}
+						}
 
-						// CLICK FOR HAND (PLAYER)!
-						for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
-							if (human.hand.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
-								//std::cout << "Clicked the hand sprite (first click)!\n"; // print to console the msg about it
-								indFirstClick = i;
-								type = HAND;
-								isClicked = true;
-								break;
-							}
-						}
-						// CLICK FOR BATTLEFIELD (PLAYER)!
-						for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
-							if (human.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
-								//std::cout << "Clicked the bf sprite (first click)!\n"; // print to console the msg about it
-								indFirstClick = i;
-								type = BF;
-								isClicked = true;
-								break;
-							}
-						}
 					}
 
 					// IF THE BUTTON WAS CLICKED BEFORE!
@@ -827,7 +923,26 @@ int main(void) {
 								}
 							}
 						}
-						if (type == BF) {
+
+						else if (type == HERO_POWER) {
+							// CLICK FOR BF (ENEMY)!
+							for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+								if (comp.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+									//std::cout << "Clicked the bf sprite (enemy) (second click)!\n"; // print to console the msg about it
+									useHeroPower(&human, &comp, i);
+									isClicked = false;
+									break;
+								}
+							}
+							// CLICK FOR HERO (ENEMY)!
+							if (comp.hero.pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+								//std::cout << "Clicked the hero sprite!\n"; // print to console the msg about it
+								useHeroPower(&human, &comp);
+								isClicked = false;
+							}
+						}
+
+						else if (type == BF) {
 							// CLICK FOR BF (ENEMY)!
 							for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
 								if (comp.bf.cardList[i].pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
@@ -841,9 +956,10 @@ int main(void) {
 							if (comp.hero.pic.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 								//std::cout << "Clicked the hero sprite!\n"; // print to console the msg about it
 								attack(&human, &comp, indFirstClick);
-								isClicked = false; // we can move sprite
+								isClicked = false;
 							}
 						}
+
 					}
 
 				}
@@ -859,7 +975,7 @@ int main(void) {
 		}
 		window.clear(); // clear all the window
 
-						// draw the map
+		// draw the map
 		for (int i = 0; i < HEIGHT_MAP; i++) {
 			for (int j = 0; j < WIDTH_MAP; j++) {
 				if (TileMap[i][j] == 'h') {
@@ -876,20 +992,6 @@ int main(void) {
 				}
 				map.sprite.setPosition(j * 32, i * 32);
 				window.draw(map.sprite);
-			}
-		}
-
-		if (keyPressedTimer > 2000) {
-			if (Keyboard::isKeyPressed(Keyboard::K)) {
-				human.startTurn();
-				isClicked = false;
-				//human.playCard(0);
-				//attack(&human, &comp, 0, 0);
-				//human.endTurn();
-				comp.startTurn();
-				comp.playCard(0);
-				comp.endTurn();
-				keyPressedTimer = 0;
 			}
 		}
 
@@ -928,6 +1030,11 @@ int main(void) {
 			human.hand.cardList[i].pic.sprite.setPosition(128 * (i + 1), 480);
 			window.draw(human.hand.cardList[i].pic.sprite);
 		}
+
+		// end turn button
+		window.draw(endTurnButton.sprite);
+		// hero power
+		window.draw(fireblast.sprite);
 
 		// draw hero: portrait / name
 		// enemy
