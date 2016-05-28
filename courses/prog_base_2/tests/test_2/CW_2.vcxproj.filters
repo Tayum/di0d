@@ -36,7 +36,7 @@
     <ClCompile Include="student.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="allTasks.c">
+    <ClCompile Include="server.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,7 +59,10 @@
     <ClInclude Include="student.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="allTasks.h">
+    <ClInclude Include="server.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="studentStruct.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

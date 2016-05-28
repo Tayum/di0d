@@ -1,21 +1,25 @@
+/*  ALERT 1: DON'T FORGET TO INCLUDE sqlite3.h AND sqlite3.c FILES! THEY ARE NOT INCLUDED ON GITHUB
+	ALERT 2: DON'T FORGET TO MODIFY/CHECK THE PATH:
+	*	The function, that is working with path is situated in: server.c file, __func__ : server_TASK4_data
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 
-#include "list/list.h"
+#include "list/list.h" // NO NEED
 #include "SQLite/sqlite3.h"
-#include "FSHelper/FSHelper.h"
 
-#include "allTasks.h"
+#include "server.h"
 
 //INIT SOCKET
 static socket_t * winSock;
 
 int main(void) {
-	// INIT STUDENT
+	// Init student
 	student_t * student = student_new();
 	student_fill(student, "Sergey Romanyuk", "KP-51", 2);
-	// OTHER
+	// Other (init server)
 	int PORT = 5000;
 	lib_init();
 	winSock = socket_new();
@@ -32,7 +36,7 @@ int main(void) {
 	char buf[10000];
 	socket_t * client = NULL;
 
-	// main cycle of the program
+	// Main cycle of the program
 	while (1) {
 		printf("Awaiting for connections...\n");
 		client = socket_accept(winSock);
@@ -57,14 +61,14 @@ int main(void) {
 		printf(">> Got request (readStatus: %i):\n'%s'\n", readStatus, buf);
 		http_request_t request = http_request_parse(buf);
 
-		// check the type/path of request (API/HTML) & analyze the method (GET/POST/DELETE)
+		// check the type/path of request & analyze the method (GET/POST)
 		// and provide the client with proper answer
 		server_analyzeRequest(&request, client, student);
 
 		socket_free(client);
 	}
 
-	// end of program
+	// Free
 	socket_close(winSock);
 	socket_free(winSock);
 	lib_free();

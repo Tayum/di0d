@@ -1,3 +1,5 @@
+/* Working with server */
+
 #ifndef ALLTASKS_H_INCLUDED
 #define ALLTASKS_H_INCLUDED
 

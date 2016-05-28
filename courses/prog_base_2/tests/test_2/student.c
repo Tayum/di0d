@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "student.h"
+#include "studentStruct.h"
 
 student_t * student_new(void) {
 	student_t * studentSmp = malloc(sizeof(struct student_s));
