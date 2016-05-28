@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="libsocket\socket_win.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -33,7 +30,13 @@
     <ClCompile Include="FSHelper\FSHelper.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="task1.c">
+    <ClCompile Include="main.c">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="student.c">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="allTasks.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClInclude Include="FSHelper\FSHelper.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="task1.h">
+    <ClInclude Include="student.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="allTasks.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

@@ -149,7 +149,8 @@
     <ClCompile Include="libsocket\socket_win.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="SQLite\sqlite3.c" />
-    <ClCompile Include="task1.c" />
+    <ClCompile Include="student.c" />
+    <ClCompile Include="allTasks.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cJSON\cJSON.h" />
@@ -157,7 +158,8 @@
     <ClInclude Include="http\http.h" />
     <ClInclude Include="libsocket\socket.h" />
     <ClInclude Include="SQLite\sqlite3.h" />
-    <ClInclude Include="task1.h" />
+    <ClInclude Include="student.h" />
+    <ClInclude Include="allTasks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
