@@ -125,11 +125,14 @@ static void server_TASK4_data(socket_t * client, http_request_t * req) {
 		// The info:
 		char * str = http_request_getArg(req, "thyText");
 		// Checks if dir exists
+		const char * directory = "C:\\Users\\Student\\Documents\\Different\\ProgBase\\Term_2\\zCW_2\\CW_2\\CW_2\\testFile"; // CHANGE DIR HERE!
 		int check = dir_exists(directory);
+		if (check == 0) {
 			server_invalidResponce(client, "No such directory");
 			return;
 		}
 		// Write to file
+		FILE * fwPtr = fopen("testFile\\data.txt", "w"); // CHANGE DIR HERE! (it opens the testFile dir, situated in the root dir of project)
 		if (fwPtr == NULL) {
 			server_invalidResponce(client, "Error while opening file");
 			return;
