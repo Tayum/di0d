@@ -1,6 +1,8 @@
 /*  ALERT 1: DON'T FORGET TO INCLUDE sqlite3.h AND sqlite3.c FILES! THEY ARE NOT INCLUDED ON GITHUB
 	ALERT 2: DON'T FORGET TO MODIFY/CHECK THE PATH:
 	*	The function, that is working with path is situated in: server.c file, __func__ : server_TASK4_data
+
+	ALERT 3: THIS IS THE OLD PROJECT
 */
 
 #include <stdio.h>
