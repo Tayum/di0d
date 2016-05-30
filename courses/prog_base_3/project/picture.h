@@ -5,15 +5,15 @@
 
 //SFML: CLASS OF SPRITE
 class Picture {
-	float imgX;	//appear coordinate X
-	float imgY;	//appear coordinate Y
-	float imgHeight; //height of img
-	float imgWidth;	//width of image
-	sf::String File;	//name of file with img
-	sf::Image image;	//image
-	sf::Texture texture;	//texture
+	float imgX;
+	float imgY;
+	float imgHeight;
+	float imgWidth;
+	sf::String File;
+	sf::Image image;
+	sf::Texture texture;
 public:
-	sf::Sprite sprite;	//sprite
+	sf::Sprite sprite;
 
 	Picture();
 	// imageFileName - must be stored in images/ folder

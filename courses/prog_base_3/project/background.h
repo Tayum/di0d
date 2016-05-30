@@ -3,12 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
-const int HEIGHT_BG = 20; // background height
-const int WIDTH_BG = 42; // bacground width
+const int HEIGHT_BG = 20;
+const int WIDTH_BG = 42;
 
 
 sf::String bgTile[HEIGHT_BG] = {
-	"hhhhcccccccccccccccccccccccccccccccccccccc", //160*134,4 (???)
+	"hhhhcccccccccccccccccccccccccccccccccccccc",
 	"hhhhcccccccccccccccccccccccccccccccccccccc",
 	"hhhhcccccccccccccccccccccccccccccccccccccc",
 	"hhhhcccccccccccccccccccccccccccccccccccccc",

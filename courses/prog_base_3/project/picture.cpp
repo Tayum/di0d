@@ -7,11 +7,11 @@ Picture::Picture() {
 	image.loadFromFile("images/" + File);
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
-	imgWidth = 286;	//width of image
-	imgHeight = 395; //height of img
+	imgWidth = 286;
+	imgHeight = 395;
 	imgX = 0;
 	imgY = 0;
-	sprite.setTextureRect(IntRect(0, 0, imgWidth, imgHeight));
+	sprite.setTextureRect(IntRect(0, 0, (int)imgWidth, (int)imgHeight));
 }
 
 // imageFileName - must be stored in images/ folder
@@ -24,7 +24,5 @@ Picture::Picture(String imageFileName, float imgX, float imgY, float imgWidth, f
 	this->imgHeight = imgHeight;
 	this->imgX = imgX;
 	this->imgY = imgY;
-	sprite.setTextureRect(IntRect(0, 0, imgWidth, imgHeight));
+	sprite.setTextureRect(IntRect(0, 0, (int)imgWidth, (int)imgHeight));
 }
-
-//sprite.move(0.1, 0); //move the sprite to +0.1 (x); +0 (y) coordinates
