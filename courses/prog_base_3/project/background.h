@@ -1,10 +1,13 @@
+#ifndef BACKGROUND_H_INCLUDED
+#define BACKGROUND_H_INCLUDED
+
 #include <SFML/Graphics.hpp>
 
-const int HEIGHT_MAP = 20; // map height
-const int WIDTH_MAP = 42;	// map width
+const int HEIGHT_BG = 20; // background height
+const int WIDTH_BG = 42; // bacground width
 
 
-sf::String TileMap[HEIGHT_MAP] = {
+sf::String bgTile[HEIGHT_BG] = {
 	"hhhhcccccccccccccccccccccccccccccccccccccc", //160*134,4 (???)
 	"hhhhcccccccccccccccccccccccccccccccccccccc",
 	"hhhhcccccccccccccccccccccccccccccccccccccc",
@@ -24,5 +27,7 @@ sf::String TileMap[HEIGHT_MAP] = {
 	"hhhh                                      ",
 	"hhhh                                      ",
 	"hhhh                                      ",
-	"hhhh                                      ",
+	"hhhh                                      "
 };
+
+#endif // BACKGROUND_H_INCLUDED
