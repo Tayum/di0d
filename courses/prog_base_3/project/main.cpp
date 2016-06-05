@@ -30,7 +30,7 @@ int main(void) {
 	//===============FONT
 	Font font;
 	font.loadFromFile("font/CyrilicOld.TTF");
-	Text heroNameEnemy("", font, 20); // 25 for "Jaina"
+	Text heroNameEnemy("", font, 20);
 	Text hpEnemy("", font, 30);
 	Text curManaEnemy("", font, 25);
 	Text maxManaEnemy("", font, 25);
@@ -50,14 +50,12 @@ int main(void) {
 	Text bfHPTextPlayer[7];
 	Text bfHPTextEnemy[7];
 	for (int i = 0; i < 7; i++) {
-		bfHPTextPlayer[i] = Text("", font, 38);
-		bfHPTextPlayer[i].setColor(Color::Red);
+		bfHPTextPlayer[i] = Text("", font, 25);
 		bfHPTextPlayer[i].setStyle(Text::Bold);
-		bfHPTextEnemy[i] = Text("", font, 38);
-		bfHPTextEnemy[i].setColor(Color::Red);
+		bfHPTextEnemy[i] = Text("", font, 25);
 		bfHPTextEnemy[i].setStyle(Text::Bold);
 	}
-	
+
 	heroNameEnemy.setColor(Color::White);
 	hpEnemy.setColor(Color::Red);
 	curManaEnemy.setColor(Color::Cyan);
@@ -147,6 +145,16 @@ int main(void) {
 	fireblast.sprite.setPosition(1056, 0);
 	//===============HERO POWER_END
 
+	//===============CONCEDE BUTTON
+	Picture concedeButton = Picture("concede.png", 0, 0, 160, 160);
+	concedeButton.sprite.setPosition(160, 0);
+	//===============CONCEDE BUTTON_END
+
+	//===============BF HEART
+	Picture bfHeart = Picture("heart.png", 0, 0, 65, 95);
+	bfHeart.sprite.setScale(0.475, 0.307);
+	//===============BF HEART_END
+
 	//===============PLAYER_INIT
 	Picture picBuffHuman = Picture("jaina.png", 0, 0, 200, 200);
 	Player human = Player("Jaina", &picBuffHuman);
@@ -175,7 +183,7 @@ int main(void) {
 	Vector2i mouseClickPos;
 	//===============MOUSE CONTROL_END
 
-	RenderWindow window(sf::VideoMode(1344, 640), "Candlehearth");	// 1366*768 is native, sf::Style:Fullscreen
+	RenderWindow window(sf::VideoMode(1344, 640), "Candlehearth");	// 1366*768 is native, sf::Style::Fullscreen
 
 	//===============MAIN MENU
 	mainMenu(&window);
@@ -185,7 +193,7 @@ int main(void) {
 	startGame(&human, &comp, &window);
 	//===============START GAME_END
 
-	// END TURN BUTTON
+	//===============END TURN BUTTON
 	Picture endTurnButton = Picture("endTurn.png", 0, 0, 320, 160);
 	if (human.turn.isTurn()) {
 		endTurnButton.sprite.setTextureRect(IntRect(0, 0, 160, 160));
@@ -194,7 +202,7 @@ int main(void) {
 		endTurnButton.sprite.setTextureRect(IntRect(160, 0, 160, 160));
 	}
 	endTurnButton.sprite.setPosition(1184, 0);
-	// END TURN BUTTON_END
+	//===============END TURN BUTTON_END
 
 	//===============MUSIC
 	Music music;
@@ -210,6 +218,13 @@ int main(void) {
 
 	while (window.isOpen()) { // Main cycle
 
+		// Check on end of game
+		if (human.hero.getCurHP() <= 0 || comp.hero.getCurHP() <= 0) {
+			music.stop();
+			endMenu(&human, &comp, &window);
+			break;
+		}
+
 		float time = clock.restart().asMilliseconds();
 		enemyTurnTimer += time;
 
@@ -223,6 +238,13 @@ int main(void) {
 				if (event.key.code == Mouse::Left) { // (LMB)
 					mouseClickPos = Mouse::getPosition(window);
 
+					// CONCEDE BUTTON CLICK
+					if (concedeButton.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+						music.stop();
+						endMenu(&human, &comp, &window);
+						break;
+					}
+
 					// END TURN BUTTON CLICK
 					if (endTurnButton.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 
@@ -231,6 +253,9 @@ int main(void) {
 						}
 						for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
 							human.bf.cardList[i].pic->sprite.setColor(Color::White);
+						}
+						for (int i = 0; i < comp.bf.getCurCardAmount();  i++) {
+							comp.bf.cardList[i].pic->sprite.setColor(Color::White);
 						}
 						fireblast.sprite.setColor(Color::White);
 						// Switch to "Enemy turn" button
@@ -243,7 +268,7 @@ int main(void) {
 					// IF THE BUTTON WAS NOT CLICKED BEFORE!
 					if (!isClicked) {
 						// CLICK FOR HERO POWER!
-						if (fireblast.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+						if (human.hero.hasUsedHeroPower() == false && human.hand.mana.isEnough(2) && fireblast.sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 							type = HERO_POWER;
 							isClicked = true;
 							fireblast.sprite.setColor(Color::Green);
@@ -252,7 +277,7 @@ int main(void) {
 							// CLICK FOR HAND (PLAYER)!
 							if (!isClicked) {
 								for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
-									if (human.hand.cardList[i].pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+									if (human.hand.mana.isEnough(human.hand.cardList[i]) && human.hand.cardList[i].pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 										indFirstClick = i;
 										type = HAND;
 										isClicked = true;
@@ -264,11 +289,18 @@ int main(void) {
 							if (!isClicked) {
 								// CLICK FOR BATTLEFIELD (PLAYER)!
 								for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
-									if (human.bf.cardList[i].pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
+									if (human.bf.cardList[i].hasAttacked() == false && human.bf.cardList[i].pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 										indFirstClick = i;
 										type = BF;
 										isClicked = true;
 										human.bf.cardList[i].pic->sprite.setColor(Color::Green);
+
+										for (int j = 0; j < comp.bf.getCurCardAmount(); j++) {
+											if (comp.bf.cardList[j].getTaunt()) {
+												comp.bf.cardList[j].pic->sprite.setColor(Color::Red);
+											}
+										}
+
 										break;
 									}
 								}
@@ -281,7 +313,7 @@ int main(void) {
 					if (isClicked) {
 						if (type == HAND) {
 							// CLICK FOR BF (PLAYER)!
-							if (IntRect(0, 320, 1344, 160).contains(mouseClickPos.x, mouseClickPos.y)) {
+							if (IntRect(0, 160, 1344, 320).contains(mouseClickPos.x, mouseClickPos.y)) {
 								human.playCard(indFirstClick);
 								isClicked = false;
 
@@ -303,7 +335,7 @@ int main(void) {
 									useHeroPower(&human, &comp, i);
 									isClicked = false;
 
-									fireblast.sprite.setColor(Color::White);
+									fireblast.sprite.setColor(Color::Red);
 
 									break;
 								}
@@ -312,7 +344,7 @@ int main(void) {
 							if (comp.hero.pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 								useHeroPower(&human, &comp);
 
-								fireblast.sprite.setColor(Color::White);
+								fireblast.sprite.setColor(Color::Red);
 
 								isClicked = false;
 							}
@@ -328,6 +360,11 @@ int main(void) {
 										human.bf.cardList[i].pic->sprite.setColor(Color::White);
 									}
 
+
+									for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+										comp.bf.cardList[i].pic->sprite.setColor(Color::White);
+									}
+
 									isClicked = false;
 									break;
 								}
@@ -338,6 +375,10 @@ int main(void) {
 
 								for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
 									human.bf.cardList[i].pic->sprite.setColor(Color::White);
+								}
+
+								for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+									comp.bf.cardList[i].pic->sprite.setColor(Color::White);
 								}
 
 								isClicked = false;
@@ -357,7 +398,12 @@ int main(void) {
 						for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
 							human.bf.cardList[i].pic->sprite.setColor(Color::White);
 						}
-						fireblast.sprite.setColor(Color::White);
+						for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+							comp.bf.cardList[i].pic->sprite.setColor(Color::White);
+						}
+						if (fireblast.sprite.getColor() == Color::Green) {
+							fireblast.sprite.setColor(Color::White);
+						}
 
 						isClicked = false;
 					}
@@ -433,6 +479,14 @@ int main(void) {
 				}
 
 				enemyTurnTimer = 0;
+				
+				for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
+					human.bf.cardList[i].pic->sprite.setColor(Color::White);
+				}
+				human.hero.pic->sprite.setColor(Color::White);
+				for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
+					comp.bf.cardList[i].pic->sprite.setColor(Color::White);
+				}
 			}
 
 		}
@@ -458,16 +512,19 @@ int main(void) {
 			}
 		}
 
-		// Draw: Cards (enemy BF, human BF (+ attack state, curHP), human Hand)
+		// Draw: Cards (enemy BF, human BF (+ attack state, BF hearts, curHP), human Hand)
 		std::ostringstream buff;
 		for (int i = 0; i < comp.bf.getCurCardAmount(); i++) {
 			comp.bf.cardList[i].pic->sprite.setPosition(192 * i, 160);
 			window.draw(comp.bf.cardList[i].pic->sprite);
 
+			bfHeart.sprite.setPosition(192 * i + 150, 290);
+			window.draw(bfHeart.sprite);
+
 			buff.str("");
 			buff << comp.bf.cardList[i].getCurHealth();
 			bfHPTextEnemy[i].setString("" + buff.str());
-			bfHPTextEnemy[i].setPosition(192 * i + 158, 278);
+			bfHPTextEnemy[i].setPosition(192 * i + 160, 288);
 			window.draw(bfHPTextEnemy[i]);
 		}
 		for (int i = 0; i < human.bf.getCurCardAmount(); i++) {
@@ -483,10 +540,13 @@ int main(void) {
 			bfTextPlayer[i].setPosition(192 * i + 62, 452);
 			window.draw(bfTextPlayer[i]);
 
+			bfHeart.sprite.setPosition(192 * i + 150, 450);
+			window.draw(bfHeart.sprite);
+
 			buff.str("");
 			buff << human.bf.cardList[i].getCurHealth();
 			bfHPTextPlayer[i].setString("" + buff.str());
-			bfHPTextPlayer[i].setPosition(192 * i + 158, 438);
+			bfHPTextPlayer[i].setPosition(192 * i + 160, 448);
 			window.draw(bfHPTextPlayer[i]);
 		}
 		for (int i = 0; i < human.hand.getCurCardAmount(); i++) {
@@ -498,6 +558,8 @@ int main(void) {
 		window.draw(endTurnButton.sprite);
 		// Draw: Hero power
 		window.draw(fireblast.sprite);
+		// Draw: "Concede" button
+		window.draw(concedeButton.sprite);
 
 		// Draw: Hero (portrait, name)
 		// enemy
@@ -583,6 +645,7 @@ int main(void) {
 		window.draw(deckPlayer);
 
 		window.display(); // Display the window's draws
+
 	}
 
 	// End of program

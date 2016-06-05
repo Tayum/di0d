@@ -4,9 +4,8 @@
 #include "minionCard.h"
 
 class Battlefield {
-static const int MAX_CARD_AMOUNT = 7;
-int curCardAmount;
-int lastCard;
+	static const int MAX_CARD_AMOUNT = 7;
+	int curCardAmount;
 public:
 	MinionCard * cardList;
 

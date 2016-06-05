@@ -7,7 +7,6 @@
 class Hand {
 	static const int MAX_CARD_AMOUNT = 10;
 	int curCardAmount;
-	int lastCard;
 public:
 	MinionCard * cardList;
 	Mana mana;

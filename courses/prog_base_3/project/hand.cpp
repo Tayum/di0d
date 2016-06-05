@@ -1,7 +1,6 @@
 #include "hand.h"
 
 Hand::Hand() {
-	lastCard = 0;
 	curCardAmount = 0;
 	cardList = new MinionCard[MAX_CARD_AMOUNT];
 	mana = Mana();
@@ -16,9 +15,8 @@ int Hand::getCurCardAmount(void) {
 
 void Hand::addLast(MinionCard card) {
 	if (!isFull()) {
-		cardList[lastCard] = card;
-		cardList[lastCard].pic->sprite.setScale(0.405, 0.425);
-		lastCard++;
+		cardList[curCardAmount] = card;
+		cardList[curCardAmount].pic->sprite.setScale(0.405, 0.425);
 		curCardAmount++;
 	}
 }
@@ -45,7 +43,6 @@ MinionCard Hand::delByInd(int index) {
 		for (i = index; i < curCardAmount - 1; i++) {
 			cardList[i] = cardList[i + 1];
 		}
-		lastCard--;
 		curCardAmount--;
 		return card;
 	}

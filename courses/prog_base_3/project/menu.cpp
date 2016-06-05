@@ -99,8 +99,10 @@ bool * repickMenu(RenderWindow * window, Player * human, int isFirst) {
 	MinionCard cardsToRepick[4];
 
 	Picture repickMenu = Picture("repickMenu.png", 0, 0, 1366, 768);
-	Picture repickButton = Picture("repick.png", 0, 0, 125, 30);
-	repickButton.sprite.setPosition(620.5, 641.5);
+	Picture startingHand = Picture("startingHand.png", 0, 0, 286, 100);
+	Picture repickButton = Picture("repick.png", 0, 0, 150, 50);
+	startingHand.sprite.setPosition(540, 0);
+	repickButton.sprite.setPosition(608, 641.5);
 	for (int i = 0; i < 4; i++) {
 		cardsToRepick[i] = human->deck.getByInd(29 - i);
 	}
@@ -108,11 +110,11 @@ bool * repickMenu(RenderWindow * window, Player * human, int isFirst) {
 		cardsToRepick[i].pic->sprite.setPosition((286 + 74) * i + 180 * isFirst, 186.5);
 	}
 
-	//===============MUSIC
+
 	Music music;
 	music.openFromFile("music/collectionManager.ogg");
 	music.play();
-	//===============MUSIC_END
+
 
 	cardRepick cardRepickNum;
 	Vector2i mousePos;
@@ -120,8 +122,8 @@ bool * repickMenu(RenderWindow * window, Player * human, int isFirst) {
 	Clock clock;
 	float clickTimer = 0;
 	while (isMenuOpened) {
-		float time = clock.getElapsedTime().asMilliseconds(); //receiving passed time (in ms)
-		clock.restart(); //restarting clock
+		float time = clock.getElapsedTime().asMilliseconds();
+		clock.restart();
 		clickTimer += time;
 		for (int i = 0; i < 4 - isFirst; i++) {
 			if (isRepicked[i]) {
@@ -170,7 +172,41 @@ bool * repickMenu(RenderWindow * window, Player * human, int isFirst) {
 		for (int i = 0; i < 4 - isFirst; i++) {
 			window->draw(cardsToRepick[i].pic->sprite);
 		}
+		window->draw(startingHand.sprite);
 		window->draw(repickButton.sprite);
 		window->display();
 	}
+}
+
+void endMenu(Player * human, Player * computer, sf::RenderWindow * window) {
+	Music music;
+	music.openFromFile("music/end.ogg");
+	music.play();
+
+	// Victory
+	if (human->hero.getCurHP() >= 0 && computer->hero.getCurHP() <= 0) {
+		Picture background = Picture("victoryBackground.png", 0, 0, 1366, 768);
+		Picture foreground = Picture("victory.png", 0, 0, 700, 576);
+		foreground.sprite.setScale(0.686, 0.686);
+		foreground.sprite.setPosition(433, 186.5);
+		do {
+			window->draw(background.sprite);
+			window->draw(foreground.sprite);
+			window->display();
+		} while (!Keyboard::isKeyPressed(Keyboard::Escape));
+	}
+	// Defeat / "Concede" button was pressed
+	else if ((computer->hero.getCurHP() >= 0 && human->hero.getCurHP() <= 0) || (human->hero.getCurHP() > 0 && computer->hero.getCurHP() > 0)) {
+		Picture background = Picture("defeatBackground.png", 0, 0, 1366, 768);
+		Picture foreground = Picture("defeat.png", 0, 0, 576, 639);
+		foreground.sprite.setScale(0.618, 0.618);
+		foreground.sprite.setPosition(495, 186.5);
+		do {
+			window->draw(background.sprite);
+			window->draw(foreground.sprite);
+			window->display();
+		} while (!Keyboard::isKeyPressed(Keyboard::Escape));
+	}
+	music.stop();
+	window->close();
 }

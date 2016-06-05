@@ -2,7 +2,6 @@
 
 Battlefield::Battlefield() {
 	curCardAmount = 0;
-	lastCard = 0;
 	cardList = new MinionCard[MAX_CARD_AMOUNT];
 }
 Battlefield::~Battlefield() {
@@ -15,9 +14,8 @@ int Battlefield::getCurCardAmount(void) {
 
 void Battlefield::addLast(MinionCard card) {
 	if (!isFull()) {
-		cardList[lastCard] = card;
-		cardList[lastCard].pic->sprite.setScale(0.671, 0.405);
-		lastCard++;
+		cardList[curCardAmount] = card;
+		cardList[curCardAmount].pic->sprite.setScale(0.671, 0.405);
 		curCardAmount++;
 	}
 }
@@ -44,7 +42,6 @@ MinionCard Battlefield::delByInd(int index) {
 		for (i = index; i < curCardAmount - 1; i++) {
 			cardList[i] = cardList[i + 1];
 		}
-		lastCard--;
 		curCardAmount--;
 		return card;
 	}

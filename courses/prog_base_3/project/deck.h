@@ -8,7 +8,6 @@
 class Deck {
 	static const int MAX_CARD_AMOUNT = 30;
 	int curCardAmount;
-	int lastCard;
 	MinionCard * cardList;
 public:
 	Deck();

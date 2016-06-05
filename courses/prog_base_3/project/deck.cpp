@@ -2,7 +2,6 @@
 
 // (it's actually STACK, it's not deck!)
 Deck::Deck() {
-	lastCard = 0;
 	curCardAmount = 0;
 	cardList = new MinionCard[MAX_CARD_AMOUNT];
 }
@@ -16,8 +15,7 @@ int Deck::getCurCardAmount(void) {
 
 void Deck::pushLast(MinionCard card) {
 	if (!isFull()) {
-		cardList[lastCard] = card;
-		lastCard++;
+		cardList[curCardAmount] = card;
 		curCardAmount++;
 	}
 }
@@ -26,23 +24,20 @@ void Deck::pushRand(MinionCard card) {
 	int index;
 	if (!isFull()) {
 		if (curCardAmount == 0) {
-			cardList[lastCard] = card;
-			lastCard++;
+			cardList[curCardAmount] = card;
 			curCardAmount++;
 		}
 		else {
 			index = rand() % curCardAmount;
-			if (index == lastCard) {
-				cardList[lastCard] = card;
-				lastCard++;
+			if (index == curCardAmount) {
+				cardList[curCardAmount] = card;
 				curCardAmount++;
 			}
 			else {
-				for (int i = lastCard; i > index; i--) {
+				for (int i = curCardAmount; i > index; i--) {
 					cardList[i] = cardList[i - 1];
 				}
 				cardList[index] = card;
-				lastCard++;
 				curCardAmount++;
 			}
 		}
@@ -66,8 +61,7 @@ MinionCard Deck::popLast(void) {
 		return card;
 	}
 	else {
-		MinionCard card = cardList[lastCard - 1];
-		lastCard--;
+		MinionCard card = cardList[curCardAmount - 1];
 		curCardAmount--;
 		return card;
 	}
