@@ -207,6 +207,7 @@ void endMenu(Player * human, Player * computer, sf::RenderWindow * window) {
 			window->display();
 		} while (!Keyboard::isKeyPressed(Keyboard::Escape));
 	}
+
 	music.stop();
 	window->close();
 }

@@ -15,7 +15,7 @@ int Battlefield::getCurCardAmount(void) {
 void Battlefield::addLast(MinionCard card) {
 	if (!isFull()) {
 		cardList[curCardAmount] = card;
-		cardList[curCardAmount].pic->sprite.setScale(0.671, 0.405);
+		cardList[curCardAmount].pic->sprite.setScale(0.671, 0.567);
 		curCardAmount++;
 	}
 }
