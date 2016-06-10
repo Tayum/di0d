@@ -22,6 +22,11 @@ typedef enum {
 	HERO_POWER
 } clickType;
 
+void initDeck(MinionCard * allCards);
+void bgDraw(RenderWindow * window, Picture * background);
+void aiLogic(Player * human, Player * comp, float * enemyTurnTimer, Picture * endTurnButton);
+
+
 void exec(log_cb_ptr log_cb_func) {
 	Clock clock;
 	clock.restart();
@@ -81,62 +86,8 @@ void exec(log_cb_ptr log_cb_func) {
 	log_cb_func(&strBuf);
 	//===============CALLBACK_END
 
-	//===============DECK_INIT
-	std::string allNames[] = {
-		"bloodfenRaptor.png",
-		"bootyBayBodyguard.png",
-		"boulderfistOgre.png",
-		"chillwindYeti.png",
-		"coreHound.png",
-		"frostwolfGrunt.png",
-		"goldshireFootman.png",
-		"ironfurGrizzly.png",
-		"lordOfTheArena.png",
-		"magmaRager.png",
-		"murlocRaider.png",
-		"oasisSnapjaw.png",
-		"riverCrocolisk.png",
-		"senjinShieldmasta.png",
-		"silverbackPatriarch.png",
-		"warGolem.png"
-	};
-	std::string allCardNames[] = {
-		"Bloodfen Raptor",
-		"Booty Bay Bodyguard",
-		"Boulderfist Ogre",
-		"Chillwind Yeti",
-		"Core Hound",
-		"Frostwolf Grunt",
-		"Goldshire Footman",
-		"Ironfur Grizzly",
-		"Lord of the Arena",
-		"Magma Rager",
-		"Murloc Raider",
-		"Oasis Snapjaw",
-		"River Crocolisk",
-		"Sen'jin Shieldmasta",
-		"Silverback Patriarch",
-		"War Golem"
-	};
-	int allAttack[] = { 3,5,6,4,9,2,1,3,6,5,2,2,2,3,1,7 };
-	int allHP[] =	  { 2,4,7,5,5,2,2,3,5,1,1,7,3,5,4,7 };
-	int allManacost[] { 2,5,6,4,7,2,1,3,6,3,1,4,2,4,3,7 };
-	bool allTaunt[] = { false,true,false,false,false,true,true,true,true,false,false,false,false,true,true,false };
 	MinionCard allCards[ALL_CARDS];
-
-	std::list<Picture *>  picList;
-	std::list<Picture *>::iterator iterList;
-	for (int i = 0; i < ALL_CARDS; i++) {
-		picList.push_back(new Picture(allNames[i], 0, 0, 286, 395));
-	}
-	MinionCard minionBuff;
-	int i = 0;
-	for (iterList = picList.begin(); iterList != picList.end(); iterList++) {
-		minionBuff = MinionCard((*iterList), allCardNames[i], allAttack[i], allHP[i], allManacost[i], allTaunt[i]);
-		allCards[i] = minionBuff;
-		i++;
-	}
-	//===============DECK_INIT_END
+	initDeck(allCards);
 
 	//===============CALLBACK
 	strBuf.str("");
@@ -190,11 +141,6 @@ void exec(log_cb_ptr log_cb_func) {
 	strBuf << "Players' decks prepared: " << clock.restart().asMilliseconds() << " millisec taken;\n\n";
 	log_cb_func(&strBuf);
 	//===============CALLBACK_END
-
-	//===============ENEMY AI
-	bool avlAttacks = true;
-	bool avlSummon = true;
-	//===============ENEMY AI_END
 
 	//===============MOUSE CONTROL
 	bool isClicked = false;
@@ -326,7 +272,7 @@ void exec(log_cb_ptr log_cb_func) {
 		}
 		else if (deckPlayer.getGlobalBounds().contains(mouseMovePos.x, mouseMovePos.y)) {
 			textPic.sprite.setPosition(deckPlayer.getPosition().x, deckPlayer.getPosition().y - 95);
-			infoBuff << "Current amount of cards\nin your deck.\nDeck contains 30\ncards at the start.";
+			infoBuff << "Current amount of\ncards in your deck.\nDeck contains 30\ncards at the start.";
 			infoText.setString("" + infoBuff.str());
 			infoText.setPosition(deckPlayer.getPosition().x, deckPlayer.getPosition().y - 95);
 			isText = true;
@@ -468,7 +414,6 @@ void exec(log_cb_ptr log_cb_func) {
 								if (comp.bf.cardList[i].pic->sprite.getGlobalBounds().contains(mouseClickPos.x, mouseClickPos.y)) {
 									useHeroPower(&human, &comp, i);
 									isClicked = false;
-
 									fireblast.sprite.setColor(Color::Red);
 
 									break;
@@ -547,97 +492,12 @@ void exec(log_cb_ptr log_cb_func) {
 
 		}
 
-		// AI
-		if (comp.turn.isTurn()) {
-			if (enemyTurnTimer > 500) {
-				// ATTACK
-				if (avlAttacks) {
-					for (int i = 0; i <= comp.bf.getCurCardAmount(); i++) {
-						if (i == comp.bf.getCurCardAmount()) {
-							avlAttacks = false;
-							break;
-						}
-						else if (comp.bf.cardList[i].hasAttacked() == false) {
-							if (human.bf.isThereTaunts()) {
-								for (int j = 0; j < human.bf.getCurCardAmount(); j++) {
-									if (human.bf.cardList[j].getTaunt()) {
-										attack(&human, &comp, i, j);
-										break;
-									}
-								}
-							}
-							else {
-								attack(&human, &comp, i);
-								break;
-							}
-						}
-						else {
-							continue;
-						}
-						break;
-					}
 
-				}
-				// SUMMON CARDS
-				else if (avlSummon) {
-					int maxMana = -1;
-					int maxManaIndex = -1;
-					if (comp.bf.isFull() == false && comp.hand.isEmpty() == false) {
-						for (int i = 0; i < comp.hand.getCurCardAmount(); i++) {
-							if (comp.hand.mana.isEnough(comp.hand.cardList[i].getManacost()) && comp.hand.cardList[i].getManacost() > maxMana) {
-								maxMana = comp.hand.cardList[i].getManacost();
-								maxManaIndex = i;
-							}
-						}
-						if (maxMana != -1 && maxManaIndex != -1) {
-							comp.playCard(maxManaIndex);
-						}
-						else {
-							avlSummon = false;
-						}
-					}
-					else {
-						avlSummon = false;
-					}
-
-				}
-				// END THE TURN
-				if (avlAttacks == false && avlSummon == false) {
-					avlAttacks = true;
-					avlSummon = true;
-					// Switch to "End turn" button
-					endTurnButton.sprite.setTextureRect(IntRect(0, 0, 160, 160));
-
-					endTurn(&human, &comp);
-				}
-
-				enemyTurnTimer = 0;
-
-			}
-
-		}
+		aiLogic(&human, &comp, &enemyTurnTimer, &endTurnButton);
 
 		window.clear(); // Clear the window
 
-		// Draw: Background
-		for (int i = 0; i < HEIGHT_BG; i++) {
-			for (int j = 0; j < WIDTH_BG; j++) {
-				if (bgTile[i][j] == 'h') {
-					background.sprite.setTextureRect(IntRect(96, 0, 32, 32));
-				}
-				else if (bgTile[i][j] == 'c') {
-					background.sprite.setTextureRect(IntRect(64, 0, 32, 32));
-				}
-				else if ((bgTile[i][j] == 'b')) {
-					background.sprite.setTextureRect(IntRect(0, 0, 32, 32));
-				}
-				else if ((bgTile[i][j] == ' ')) {
-					background.sprite.setTextureRect(IntRect(32, 0, 32, 32));
-				}
-				background.sprite.setPosition(j * 32, i * 32);
-				window.draw(background.sprite);
-			}
-		}
+		bgDraw(&window, &background);
 
 		// Draw: Cards (enemy BF, human BF (+ attack state, BF hearts, curHP), human Hand)
 		std::ostringstream buff;
@@ -768,6 +628,166 @@ void exec(log_cb_ptr log_cb_func) {
 			window.draw(infoText);
 		}
 		window.display(); // Display the window's draws
+
+	}
+
+}
+
+//===============DECK_INIT
+void initDeck(MinionCard * allCards) {
+
+	std::string allNames[] = {
+		"bloodfenRaptor.png",
+		"bootyBayBodyguard.png",
+		"boulderfistOgre.png",
+		"chillwindYeti.png",
+		"coreHound.png",
+		"frostwolfGrunt.png",
+		"goldshireFootman.png",
+		"ironfurGrizzly.png",
+		"lordOfTheArena.png",
+		"magmaRager.png",
+		"murlocRaider.png",
+		"oasisSnapjaw.png",
+		"riverCrocolisk.png",
+		"senjinShieldmasta.png",
+		"silverbackPatriarch.png",
+		"warGolem.png"
+	};
+	std::string allCardNames[] = {
+		"Bloodfen Raptor",
+		"Booty Bay Bodyguard",
+		"Boulderfist Ogre",
+		"Chillwind Yeti",
+		"Core Hound",
+		"Frostwolf Grunt",
+		"Goldshire Footman",
+		"Ironfur Grizzly",
+		"Lord of the Arena",
+		"Magma Rager",
+		"Murloc Raider",
+		"Oasis Snapjaw",
+		"River Crocolisk",
+		"Sen'jin Shieldmasta",
+		"Silverback Patriarch",
+		"War Golem"
+	};
+	int allAttack[] = { 3,5,6,4,9,2,1,3,6,5,2,2,2,3,1,7 };
+	int allHP[] = { 2,4,7,5,5,2,2,3,5,1,1,7,3,5,4,7 };
+	int allManacost[]{ 2,5,6,4,7,2,1,3,6,3,1,4,2,4,3,7 };
+	bool allTaunt[] = { false,true,false,false,false,true,true,true,true,false,false,false,false,true,true,false };
+
+
+	std::list<Picture *>  picList;
+	std::list<Picture *>::iterator iterList;
+	for (int i = 0; i < ALL_CARDS; i++) {
+		picList.push_back(new Picture(allNames[i], 0, 0, 286, 395));
+	}
+	MinionCard minionBuff;
+	int i = 0;
+	for (iterList = picList.begin(); iterList != picList.end(); iterList++) {
+		minionBuff = MinionCard((*iterList), allCardNames[i], allAttack[i], allHP[i], allManacost[i], allTaunt[i]);
+		allCards[i] = minionBuff;
+		i++;
+	}
+
+}
+
+// Draw background
+void bgDraw(RenderWindow * window, Picture * background) {
+
+	for (int i = 0; i < HEIGHT_BG; i++) {
+		for (int j = 0; j < WIDTH_BG; j++) {
+			if (bgTile[i][j] == 'h') {
+				background->sprite.setTextureRect(IntRect(96, 0, 32, 32));
+			}
+			else if (bgTile[i][j] == 'c') {
+				background->sprite.setTextureRect(IntRect(64, 0, 32, 32));
+			}
+			else if ((bgTile[i][j] == 'b')) {
+				background->sprite.setTextureRect(IntRect(0, 0, 32, 32));
+			}
+			else if ((bgTile[i][j] == ' ')) {
+				background->sprite.setTextureRect(IntRect(32, 0, 32, 32));
+			}
+			background->sprite.setPosition(j * 32, i * 32);
+			window->draw(background->sprite);
+		}
+	}
+
+}
+
+// AI
+void aiLogic(Player * human, Player * comp, float * enemyTurnTimer, Picture * endTurnButton) {
+	static bool avlAttacks = true;
+	static bool avlSummon = true;
+
+	if (comp->turn.isTurn()) {
+		if ((*enemyTurnTimer) > 500) {
+			// ATTACK
+			if (avlAttacks) {
+				for (int i = 0; i <= comp->bf.getCurCardAmount(); i++) {
+					if (i == comp->bf.getCurCardAmount()) {
+						avlAttacks = false;
+						break;
+					}
+					else if (comp->bf.cardList[i].hasAttacked() == false) {
+						if (human->bf.isThereTaunts()) {
+							for (int j = 0; j < human->bf.getCurCardAmount(); j++) {
+								if (human->bf.cardList[j].getTaunt()) {
+									attack(human, comp, i, j);
+									break;
+								}
+							}
+						}
+						else {
+							attack(human, comp, i);
+							break;
+						}
+					}
+					else {
+						continue;
+					}
+					break;
+				}
+
+			}
+			// SUMMON CARDS
+			else if (avlSummon) {
+				int maxMana = -1;
+				int maxManaIndex = -1;
+				if (comp->bf.isFull() == false && comp->hand.isEmpty() == false) {
+					for (int i = 0; i < comp->hand.getCurCardAmount(); i++) {
+						if (comp->hand.mana.isEnough(comp->hand.cardList[i].getManacost()) && comp->hand.cardList[i].getManacost() > maxMana) {
+							maxMana = comp->hand.cardList[i].getManacost();
+							maxManaIndex = i;
+						}
+					}
+					if (maxMana != -1 && maxManaIndex != -1) {
+						comp->playCard(maxManaIndex);
+					}
+					else {
+						avlSummon = false;
+					}
+				}
+				else {
+					avlSummon = false;
+				}
+
+			}
+			// END THE TURN
+			if (avlAttacks == false && avlSummon == false) {
+				avlAttacks = true;
+				avlSummon = true;
+				// Switch to "End turn" button
+				endTurnButton->sprite.setTextureRect(IntRect(0, 0, 160, 160));
+
+				endTurn(human, comp);
+			}
+
+			(*enemyTurnTimer) = 0;
+
+		}
 
 	}
 

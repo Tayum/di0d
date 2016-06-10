@@ -1,6 +1,6 @@
 #include "deck.h"
 
-// (it's actually STACK, it's not deck!)
+
 Deck::Deck() {
 	curCardAmount = 0;
 	cardList = new MinionCard[MAX_CARD_AMOUNT];
@@ -9,8 +9,9 @@ Deck::~Deck() {
 	delete[] cardList;
 }
 
-int Deck::getCurCardAmount(void) {
-	return curCardAmount;
+// Getter function for static variable
+int Deck::getMaxCardAmount(void) const {
+	return MAX_CARD_AMOUNT;
 }
 
 void Deck::pushLast(MinionCard card) {
@@ -41,17 +42,6 @@ void Deck::pushRand(MinionCard card) {
 				curCardAmount++;
 			}
 		}
-	}
-}
-
-MinionCard Deck::getByInd(int index) {
-	if (!isValidInd(index)) {
-		MinionCard card = MinionCard();
-		return card;
-	}
-	else {
-		MinionCard card = cardList[index];
-		return card;
 	}
 }
 
@@ -151,17 +141,4 @@ void Deck::repickComp(int isFirst) {
 			}
 		}
 	}
-}
-
-// Private
-bool Deck::isValidInd(int index) {
-	return (index >= 0 && index < curCardAmount);
-}
-
-bool Deck::isEmpty(void) {
-	return curCardAmount == 0;
-}
-
-bool Deck::isFull(void) {
-	return curCardAmount == MAX_CARD_AMOUNT;
 }

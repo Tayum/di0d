@@ -1,28 +1,19 @@
 #ifndef HAND_H_INCLUDED
 #define HAND_H_INCLUDED
 
-#include "minionCard.h"
+#include "baseCard.h"
 #include "mana.h"
 
-class Hand {
+class Hand : public BaseCard {
 	static const int MAX_CARD_AMOUNT = 10;
-	int curCardAmount;
+	// Getter function for static variable
+	int getMaxCardAmount(void) const;
 public:
-	MinionCard * cardList;
 	Mana mana;
 
 	Hand();
 	~Hand();
-	int getCurCardAmount(void);
 	void addLast(MinionCard card);
-	MinionCard getByInd(int index);
-	MinionCard delByInd(int index);
-	bool isEmpty();
-	bool isValidInd(int index);
-
-private:
-	bool isFull();
-
 };
 
 #endif // HAND_H_INCLUDED
