@@ -6,9 +6,10 @@
 // An abstract class, which holds !(shared)! (same logic) variables and functions.
 // These variables and functions are used in Battlefield, Deck and Hand classes.
 class BaseCard {
-public:
 	// All classes
+protected:
 	int curCardAmount;
+public:
 	MinionCard * cardList;
 
 	int getCurCardAmount(void);

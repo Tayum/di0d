@@ -4,7 +4,6 @@
 #include "player.h"
 #include <SFML/Graphics.hpp>
 
-// GENERAL FUNCTIONS
 void attack(Player * human, Player * computer, int cardAttackerInd, int cardDefenderInd);
 void attack(Player * human, Player * computer, int cardAttackerInd);
 void useHeroPower(Player * human, Player * computer);

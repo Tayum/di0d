@@ -8,13 +8,69 @@
 using namespace sf;
 
 typedef enum {
+	NODIF,
+	EASY,
+	HARD
+} difficulty;
+
+static bool difficultyMenu(RenderWindow * window) {
+	Picture background = Picture("difficulty.png", 0, 0, 1366, 768);
+	Picture easy = Picture("easy.png", 0, 0, 150, 50);
+	Picture hard = Picture("hard.png", 0, 0, 150, 50);
+
+	easy.sprite.setPosition(608, 231);
+	hard.sprite.setPosition(608, 487);
+
+	bool isMenuOpened = true;
+	difficulty menuButtonNum;
+	Vector2i mousePos;
+
+	while (isMenuOpened) {
+		menuButtonNum = NODIF;
+		mousePos = Mouse::getPosition((*window));
+		window->clear();
+
+		if (easy.sprite.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+			easy.sprite.setColor(Color::Yellow);
+			menuButtonNum = EASY;
+		}
+		if (hard.sprite.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+			hard.sprite.setColor(Color::Yellow);
+			menuButtonNum = HARD;
+		}
+
+		if (Mouse::isButtonPressed(Mouse::Left)) {
+			if (menuButtonNum == EASY) {
+				isMenuOpened = false;
+			}
+			if (menuButtonNum == HARD) {
+				menuButtonNum = HARD;
+				isMenuOpened = false;
+			}
+		}
+
+		window->draw(background.sprite);
+		window->draw(easy.sprite);
+		window->draw(hard.sprite);
+
+		window->display();
+	}
+	if (menuButtonNum == EASY) {
+		return false;
+	}
+	else if (menuButtonNum == HARD) {
+		return true;
+	}
+}
+
+typedef enum {
 	NOMENU,
 	NEWGAME,
 	ABOUT,
 	EXIT
 } menuButton;
 
-void mainMenu(RenderWindow * window) {
+bool mainMenu(RenderWindow * window) {
 	Picture mainMenu = Picture("mainMenu.png", 0, 0, 1366, 768);
 	Picture newGame = Picture("newGame.png", 0, 0, 150, 30);
 	Picture about = Picture("about.png", 0, 0, 85, 30);
@@ -33,6 +89,8 @@ void mainMenu(RenderWindow * window) {
 	music.openFromFile("music/mainMenu.ogg");
 	music.play();
 	music.setLoop(true);
+
+	bool difficulty = false;
 
 	while (isMenuOpened) {
 		newGame.sprite.setColor(Color::White);
@@ -57,6 +115,7 @@ void mainMenu(RenderWindow * window) {
 
 		if (Mouse::isButtonPressed(Mouse::Left)) {
 			if (menuButtonNum == NEWGAME) {
+				difficulty = difficultyMenu(window);
 				isMenuOpened = false;
 				music.stop();
 			}
@@ -80,6 +139,7 @@ void mainMenu(RenderWindow * window) {
 		
 		window->display();
 	}
+	return difficulty;
 }
 
 typedef enum {

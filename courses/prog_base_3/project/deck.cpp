@@ -1,6 +1,5 @@
 #include "deck.h"
 
-
 Deck::Deck() {
 	curCardAmount = 0;
 	cardList = new MinionCard[MAX_CARD_AMOUNT];
