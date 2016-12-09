@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfArmor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Armor Type="PLATE" Slot="BODY">
+    <PhysicalDefense>15</PhysicalDefense>
+    <MagicalDefense>5</MagicalDefense>
+    <Evasion>3</Evasion>
+  </Armor>
+  <Armor Type="PLATE" Slot="GLOVES">
+    <PhysicalDefense>4</PhysicalDefense>
+    <MagicalDefense>2</MagicalDefense>
+    <Evasion>1</Evasion>
+  </Armor>
+  <Armor Type="PLATE" Slot="BOOTS">
+    <PhysicalDefense>5</PhysicalDefense>
+    <MagicalDefense>3</MagicalDefense>
+    <Evasion>2</Evasion>
+  </Armor>
+</ArrayOfArmor>

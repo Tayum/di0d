@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="lab3.Exposition">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="lab3.Exposition.ExpositionAddEquipmentHandler">
+        <TypeIdentifier>
+          <NewMemberFileName>Exposition.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ACAAAAgAAAAAAAAAAAAAAASAAABEIAwAACAAAAAAAAA=</HashCode>
+      <FileName>Exposition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Armor" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="lab3.Armor.ARMOR_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Armor\Armor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="lab3.Armor.ARMOR_SLOT" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Armor\Armor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAQGAAAAAggAAAAJAAAAAQACAAAAAoA=</HashCode>
+      <FileName>Armor\Armor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="lab3.Hero">
+    <Position X="4" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAIkAAAAAAQAAQBEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Hero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.HeroCollection" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAAAAABAACAAABAQAAAAAAAAEAAAAAABQAAA=</HashCode>
+      <FileName>HeroCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="lab3.HeroEnumerator" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAABAAAAECAAAAAgAAAAAAAoAAAAAABAAA=</HashCode>
+      <FileName>HeroEnumerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="lab3.NoArrowsException">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NoArrowsException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Program">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAABAACAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.CollectionExtension">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Interfaces\ICollectionExtension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.AccuracyExtension">
+    <Position X="6" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPhysicalAccuracyExtension.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Grimoire">
+    <Position X="15.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAEIAAAAAAgAAAAAAAAAQAAAAAAAgA=</HashCode>
+      <FileName>Weapons\Magical\Grimoire.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Magical">
+    <Position X="15.5" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="lab3.Magical.ELEMENT_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Weapons\Magical\Magical.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAEAAAAAAAAAAAAABAAAAAQAAAAAAA=</HashCode>
+      <FileName>Weapons\Magical\Magical.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Orb">
+    <Position X="17.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAEIAAAAAAgAAAAAAAAAQAAAAAAAgA=</HashCode>
+      <FileName>Weapons\Magical\Orb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Blunt">
+    <Position X="13.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAEIAAAAAAgAAAAAAAEAQAAAAABAgA=</HashCode>
+      <FileName>Weapons\Mixed\Blunt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="lab3.Mixed">
+    <Position X="11.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAEAAAAAAAAAAAAABAEAAAQgAAAAAA=</HashCode>
+      <FileName>Weapons\Mixed\Mixed.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="lab3.Staff">
+    <Position X="11.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAEIAAAAAAgAAAAAAAEAQAAAAABAgA=</HashCode>
+      <FileName>Weapons\Mixed\Staff.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="lab3.Bow">
+    <Position X="13.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAEIAAAAAAgAAAAAAAEAQAAAAAAAgg=</HashCode>
+      <FileName>Weapons\Physical\Bow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="lab3.Physical">
+    <Position X="13.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAgAAAAAA=</HashCode>
+      <FileName>Weapons\Physical\Physical.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="lab3.Spear">
+    <Position X="11.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAEIAAAAAAgAAAAAAAEAQAAAAABAgA=</HashCode>
+      <FileName>Weapons\Physical\Spear.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="lab3.Sword">
+    <Position X="15.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAEIAAAAAAgAAAAAAAEAQAAAAABAgA=</HashCode>
+      <FileName>Weapons\Physical\Sword.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="lab3.IWeaponStats">
+    <Position X="9.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAEAIAAAA=</HashCode>
+      <FileName>Interfaces\IWeaponStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.IArmorStats">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAACAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IArmorStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.ICollectionExtension">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Interfaces\ICollectionExtension.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.IMagicalStats">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Interfaces\IMagicalStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.IPhysicalAccuracyExtension">
+    <Position X="7.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPhysicalAccuracyExtension.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.IPhysicalMeleeStats">
+    <Position X="7.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPhysicalMeleeStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="lab3.IPhysicalStats">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPhysicalStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
