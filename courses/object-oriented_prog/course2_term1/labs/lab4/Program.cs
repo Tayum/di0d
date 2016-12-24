@@ -121,6 +121,10 @@ namespace lab4
             }
             Console.WriteLine("\n****************************\n");
 
+            // if we try to "console.log" the (Hero)weakRef.Target now (after it will be gathered with
+            // Garbage Collector) it will be empty (""):
+            Console.WriteLine("weakRef.Target is " + (Hero)weakRef.Target + "!"); // 'weakRef.Target is !'
+
             // Dispose
             Console.Write("RIGHT NOW ");
             Console.ForegroundColor = ConsoleColor.DarkRed;

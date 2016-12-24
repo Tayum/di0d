@@ -106,9 +106,6 @@ namespace lab4
                         }
                         //armorList = null;
                     }*/
-
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
                 }
 
                 isDisposed = true;
