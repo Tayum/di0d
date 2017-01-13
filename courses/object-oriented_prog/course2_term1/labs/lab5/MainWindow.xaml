@@ -1,0 +1,168 @@
+﻿<Window x:Class="lab5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lab5="clr-namespace:lab5"
+        mc:Ignorable="d"
+        Title="Armor Array"
+        Background="{DynamicResource WindowBackgroundBrush }"
+        MinWidth="760"
+        Width="760"
+        MaxWidth="760"
+        Height="350"
+        MinHeight="120">
+    <Window.DataContext>
+        <lab5:MainViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <!--<c:CommandReference x:Key="ExitCommandReference"
+                        Command="{Binding ExitCommand}" />-->
+        <Style x:Key="LabelStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontWeight" Value="Normal" />
+
+        </Style>
+        <Style x:Key="GridViewHeaderStyle"
+               TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#CD853F" />
+            <Setter Property="Background" Value="#FDEAA8" />
+        </Style>
+        <LinearGradientBrush x:Key="WindowBackgroundBrush">
+            <GradientStop Offset="0" Color="#FDEAA8"/>
+            <GradientStop Offset="1" Color="#CD853F"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <!--<Window.InputBindings>
+        <KeyBinding Key="X" Modifiers="Control"
+                Command="{StaticResource ExitCommandReference}" />
+    </Window.InputBindings>-->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Command="{Binding ExitCommand}"
+                      Header="Save &amp; E_xit"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Center"
+          VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Name</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="NameField" Width="100" Margin="10, 0, 25, 0"
+                     Text="{Binding Path=ANameToAdd,
+                Mode=OneWayToSource}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Physical Defense</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="PhysicalDefenseField" Width="50" Margin="10, 0, 25, 0"
+                     Text="{Binding Path=APhysicalDefenseToAdd,
+                Mode=OneWayToSource}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Magical Defense</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="MagicalDefenseField"  Width="50" Margin="10, 0, 25, 0"
+                        Text="{Binding Path=AMagicalDefenseToAdd,
+                Mode=OneWayToSource}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Evasion</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="EvasionField"  Width="50" Margin="10, 0, 25, 0"
+                         Text="{Binding Path=AEvasionToAdd,
+                    Mode=OneWayToSource}">
+                </TextBox>
+
+                <Button x:Name="btnAddArmor"
+                            Content="Add"
+                            Background="LightBlue"
+                            Command="{Binding AddArmor}" IsEnabled="False" Width="60">
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <ListView  
+            Name="ArmorList"
+            Grid.Row="2" BorderBrush="White"
+                   ItemsSource="{Binding Path=ArmorArr}"
+                   HorizontalAlignment="Center" Width="752" Margin="0,0,0,40">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name"
+                                    HeaderContainerStyle=
+                                    "{StaticResource GridViewHeaderStyle}"
+                                    DisplayMemberBinding="{Binding Path=Name}"
+                                    Width="280" />
+                    <GridViewColumn Header="Physical Defense"
+                                    HeaderContainerStyle=
+                                    "{StaticResource GridViewHeaderStyle}"
+                                    DisplayMemberBinding="{Binding Path=PhysicalDefense}"
+                                    Width="160" />
+                    <GridViewColumn Header="Magical Defense"
+                                    HeaderContainerStyle=
+                                    "{StaticResource GridViewHeaderStyle}"
+                                    DisplayMemberBinding="{Binding Path=MagicalDefense}"
+                                    Width="160" />
+                    <GridViewColumn Header="Evasion"
+                                    HeaderContainerStyle=
+                                    "{StaticResource GridViewHeaderStyle}"
+                                    DisplayMemberBinding="{Binding Path=Evasion}"
+                                    Width="150" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Grid Grid.Row="3"
+          VerticalAlignment="Bottom" Margin="10, 0, 0, 5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Name</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="NameEditField" Width="100" Margin="10, 0, 15, 0"
+                         Text="{Binding SelectedItem.Name, ElementName=ArmorList, Mode=OneWay}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Physical Defense</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="PhysicalDefenseEditField" Width="50" Margin="10, 0, 15, 0"
+                     Text="{Binding SelectedItem.PhysicalDefense, ElementName=ArmorList, Mode=OneWay}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Magical Defense</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="MagicalDefenseEditField"  Width="50" Margin="10, 0, 15, 0"
+                        Text="{Binding SelectedItem.MagicalDefense, ElementName=ArmorList, Mode=OneWay}">
+                </TextBox>
+
+                <TextBlock Style="{StaticResource  LabelStyle}">
+                Evasion</TextBlock>
+                <TextBox Validation.ErrorTemplate="{x:Null}" Name="EvasionEditField"  Width="50" Margin="10, 0, 10, 0"
+                         Text="{Binding SelectedItem.Evasion, ElementName=ArmorList, Mode=OneWay}">
+                </TextBox>
+
+                <Button x:Name="btnEditArmor"
+                            IsEnabled="{Binding ElementName=ArmorList, Path=SelectedItems.Count}"
+                            Content="Edit"
+                            Background="LightGreen"
+                            Click="MW_editArmor" Width="60"  Margin="10, 0, 10, 0">
+                </Button>
+                <Button x:Name="btnDeleteArmor"
+                            IsEnabled="{Binding ElementName=ArmorList, Path=SelectedItems.Count}"
+                            Content="Delete"
+                            Background="Red"
+                            Click="MW_deleteArmor" Width="60">
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
