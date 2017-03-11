@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Task2.BookholderC">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAEAAAAAAAAAAAACABQAAAAAEAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Bookholder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Task2.Bookholder">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAGAAAAAAAAABAAAABQAAAAAAAAACAAAgAAAAAAA=</HashCode>
+      <FileName>Bookholder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Task2.Book">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAEAAAAAACAAggAAABQAAAAAAAIACAAAAACAABiA=</HashCode>
+      <FileName>Bookholder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Task2.Program">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
