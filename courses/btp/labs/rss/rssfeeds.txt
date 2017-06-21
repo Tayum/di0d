@@ -1,0 +1,4 @@
+http://rss.cnn.com/rss/edition_us.rss
+http://feeds.reuters.com/Reuters/domesticNews
+https://www.yahoo.com/news/rss/
+http://rss.nytimes.com/services/xml/rss/nyt/US.xml
