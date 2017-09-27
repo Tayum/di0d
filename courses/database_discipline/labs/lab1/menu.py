@@ -1,19 +1,12 @@
 from pckl import File
-from accessory import Accessories
-from computer import Computers
 
 
 class Menu:
+    def __init__(self, accessories, computers):
+        self.accessories = accessories
+        self.computers = computers
 
     def run(self):
-        file = File()
-        accessories = file.load_accessories()
-        computers = file.load_computers()
-        if not accessories:
-            accessories = Accessories()
-        if not computers:
-            computers = Computers()
-
         self._print_menu()
         while True:
             choice = input("\n>")
@@ -21,30 +14,31 @@ class Menu:
             if choice == "0":
                 self._print_menu()
             elif choice == "1":
-                self._add_accessory(accessories)
+                self._add_accessory()
             elif choice == "2":
-                self._print_accessories(accessories)
+                self._print_accessories()
             elif choice == "3":
-                self._update_accessory(accessories)
+                self._update_accessory()
             elif choice == "4":
-                self._delete_accessory(accessories, computers)
+                self._delete_accessory()
             elif choice == "5":
-                self._add_computer(computers)
+                self._add_computer()
             elif choice == "6":
-                self._print_computers(computers)
+                self._print_computers()
             elif choice == "7":
-                self._update_computer(computers)
+                self._update_computer()
             elif choice == "8":
-                self._add_accessory_to_computer(computers, accessories)
+                self._add_accessory_to_computer()
             elif choice == "9":
-                self._delete_accessory_from_computer(computers, accessories)
+                self._delete_accessory_from_computer()
             elif choice == "10":
-                self._delete_computer(computers)
+                self._delete_computer()
             elif choice == "11":
-                self._print_specific_computers(computers, accessories)
+                self._print_specific_computers()
             elif choice == "q" or choice == "Q" or choice == "quit":
-                file.save_accessories(accessories)
-                file.save_computers(computers)
+                file = File()
+                file.save_accessories()
+                file.save_computers()
                 break
             elif choice == "disc" or choice == "disconnect":
                 break
@@ -72,11 +66,11 @@ class Menu:
             menu += "%d" % (i + 1) + ". " + menu_str[i] + "\n"
         print(menu)
 
-    def _add_accessory(self, accessories):
+    def _add_accessory(self):
         name = input("\nName: ")
         type = input("\nType: ")
         if name and type:
-            rslt = accessories.add(name, type)
+            rslt = self.accessories.add(name, type)
             if not rslt:
                 print("\nSuch accessory already exists")
             else:
@@ -85,14 +79,14 @@ class Menu:
         else:
             print("\nThe fields cannot be <Empty>")
 
-    def _print_accessories(self, accessories):
+    def _print_accessories(self):
         print("\nThe list of all accessories:")
-        print(accessories.__str__())
+        print(self.accessories.__str__())
 
-    def _update_accessory(self, accessories):
+    def _update_accessory(self):
         try:
             id = int(input("\nID: "))
-            acs = accessories.get_by_id(id)
+            acs = self.accessories.get_by_id(id)
             if acs is None:
                 print("No accessory with such ID")
             else:
@@ -100,7 +94,7 @@ class Menu:
                 name = input("\nNew name: ")
                 type = input("\nNew type: ")
                 if name and type:
-                    rslt = accessories.update(id, name, type)
+                    rslt = self.accessories.update(id, name, type)
                     print("\nThe accessory is updated:")
                     print(rslt.__str__())
                 else:
@@ -108,23 +102,23 @@ class Menu:
         except ValueError:
             print("The ID must be <Integer>")
 
-    def _delete_accessory(self, accessories, computers):
+    def _delete_accessory(self):
         try:
             id = int(input("\nID: "))
-            acs = accessories.delete(id)
+            acs = self.accessories.delete(id)
             if acs is None:
                 print("No accessory with such ID")
             else:
-                computers.delete_all_accessories(acs.id)
+                self.computers.delete_all_accessories(acs.id)
                 print("This accessory was deleted:")
                 print(acs.__str__())
         except ValueError:
             print("The ID must be <Integer>")
 
-    def _add_computer(self, computers):
+    def _add_computer(self):
         name = input("\nName: ")
         if name:
-            rslt = computers.add(name)
+            rslt = self.computers.add(name)
             if not rslt:
                 print("\nThe computer with such name already exists")
             else:
@@ -133,21 +127,21 @@ class Menu:
         else:
             print("\nThe field cannot be <Empty>")
 
-    def _print_computers(self, computers):
+    def _print_computers(self):
         print("\nThe list of all computers:")
-        print(computers.__str__())
+        print(self.computers.__str__())
 
-    def _update_computer(self, computers):
+    def _update_computer(self):
         try:
             id = int(input("\nID: "))
-            comp = computers.get_by_id(id)
+            comp = self.computers.get_by_id(id)
             if comp is None:
                 print("No computer with such ID")
             else:
                 print(comp.__str__())
                 name = input("\nNew name: ")
                 if name:
-                    rslt = computers.update(id, name)
+                    rslt = self.computers.update(id, name)
                     print("\nThe computer's name is updated:")
                     print(rslt.__str__())
                 else:
@@ -155,15 +149,15 @@ class Menu:
         except ValueError:
             print("The ID must be <Integer>")
 
-    def _add_accessory_to_computer(self, computers, accessories):
+    def _add_accessory_to_computer(self):
         try:
             id_comp = int(input("\nID of computer to add an accessory to: "))
             id_acs = int(input("\nID of accessory to add to the computer: "))
-            acs = accessories.get_by_id(id_acs)
+            acs = self.accessories.get_by_id(id_acs)
             if not acs:
                 print("\nNo accessory with such ID")
             else:
-                rslt = computers.add_accessory(id_comp, id_acs)
+                rslt = self.computers.add_accessory(id_comp, id_acs)
                 if not rslt:
                     print("\nNo computer with such ID")
                 else:
@@ -171,15 +165,15 @@ class Menu:
         except ValueError:
             print("The ID(s) must be <Integer>")
 
-    def _delete_accessory_from_computer(self, computers, accessories):
+    def _delete_accessory_from_computer(self):
         try:
             id_comp = int(input("\nID of computer to remove an accessory from: "))
             id_acs = int(input("\nID of accessory to remove from the computer: "))
-            acs = accessories.get_by_id(id_acs)
+            acs = self.accessories.get_by_id(id_acs)
             if not acs:
                 print("\nNo accessory with such ID")
             else:
-                rslt = computers.delete_accessory(id_comp, id_acs)
+                rslt = self.computers.delete_accessory(id_comp, id_acs)
                 if isinstance(rslt, str):
                     print("\n" + rslt)
                 else:
@@ -187,10 +181,10 @@ class Menu:
         except ValueError:
             print("The ID(s) must be <Integer>")
 
-    def _delete_computer(self, computers):
+    def _delete_computer(self):
         try:
             id = int(input("\nID: "))
-            comp = computers.delete(id)
+            comp = self.computers.delete(id)
             if comp is None:
                 print("No computer with such ID")
             else:
@@ -199,9 +193,9 @@ class Menu:
         except ValueError:
             print("The ID must be <Integer>")
 
-    def _print_specific_computers(self, computers, accessories):
+    def _print_specific_computers(self):
         print("Task: to print the computers that has <Accessory> with <Type> 'Videocard'")
-        comp_list = computers.get_by_task(accessories)
+        comp_list = self.computers.get_by_task(self.accessories)
         if not comp_list:
             print("<No 'Videocard' accessory found OR no computers with 'Videocard' accessory found>")
         else:

@@ -26,6 +26,7 @@ class Computer:
 
         return key.join(info)
 
+
 class Computers:
     def __init__(self):
         self.computers = list()

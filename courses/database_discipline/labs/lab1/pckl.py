@@ -9,7 +9,6 @@ class File:
         except EOFError:
             return False
 
-
     def load_accessories(self):
         try:
             with open('accessories.db', 'rb') as f:
