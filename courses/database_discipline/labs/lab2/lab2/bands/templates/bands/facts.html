@@ -1,0 +1,74 @@
+{% extends "bands/base.html" %}
+{% load static %}
+
+{% block headblock %}
+  <title>Facts</title>
+  <!-- jQuery library -->
+  <script src="{% static 'bands/js/jquery-3.2.1.js' %}"></script>
+  <!-- Latest compiled Bootstrap JavaScript -->
+  <script src="{% static 'bands/js/bootstrap.js' %}"></script>
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+    <div class="panel panel-default">
+    <div class="panel-heading"><b>Facts <small><i>(song releases)</i></small></b></div>
+    <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+          <th>ID</th>
+          <th>Artist</th>
+          <th>Album</th>
+          <th>Song</th>
+          <th>Released on</th>
+          <th style="width:1px"></th>
+          <th style="width:1px"></th>
+      </tr>
+      </thead>
+      </tbody>
+        {% for fact in facts.rows %}
+            <tr>
+                {% for field in fact %}
+                    <td>{{ field }}</td>
+                {% endfor %}
+                <!-- inserting ID values into URL of buttons -->
+                <td>
+                <form action="/bands/savefact/" method="GET">
+                  <input type="hidden" name="q" value="to_save">
+                  <input type="hidden" name="id" value="{{ fact.0 }}">
+                  <input type="submit" class="btn btn-info" value='Modify' />
+                </form>
+                </td>
+                <td>
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal{{ fact.0 }}">Delete</button>
+                <!-- Modal -->
+                <div id="myModal{{ fact.0 }}" class="modal fade" role="dialog">
+                  <div class="modal-dialog modal-sm">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title"><i>Are you sure?</i></h4>
+                      </div>
+                      <div class="modal-footer">
+                        <form action="/bands/facts/" method="POST">
+                          <input type="hidden" name="q" value="delete">
+                          <input type="hidden" name="id" value="{{ fact.0 }}">
+                          <input type="submit" class="btn btn-danger" value='Delete' />
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    </div>
+  </div>
+{% endblock %}

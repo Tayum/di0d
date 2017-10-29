@@ -1,0 +1,21 @@
+{% extends "bands/base.html" %}
+{% load static %}
+
+{% block headblock %}
+  <title>Home</title>
+  <meta name="description" content="Bands App">
+  <meta name="author" content="Sergei Romaniuk">
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+  <img class="img-responsive center-block" alt='logo' src="{% static 'bands/images/index.jpg' %}" />
+  <br>
+  <div class="text-center">
+  <form action="/bands/" method="POST">
+    <input type="hidden" name="q" value="load">
+    <input type="submit" class="btn btn-success" value='Load' />
+  </form>
+  </div>
+  </div>
+{% endblock %}

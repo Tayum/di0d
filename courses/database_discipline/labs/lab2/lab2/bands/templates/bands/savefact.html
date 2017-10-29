@@ -1,0 +1,117 @@
+{% extends "bands/base.html" %}
+
+<!DOCTYPE html>
+{% block headblock %}
+  <title>Save Fact</title>
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+  <h1 class="page-header">Save the Fact of the Song Release.</h1>
+  <!-- <% if (errors) { %>
+      <% for (let i = 0; i < errors.length; i++) { %>
+        <div class="alert alert-danger"><%= errors[i].msg %></div>
+      <% } %>
+  <% } %> -->
+  <form action="/bands/facts/" enctype="multipart/form-data" method="POST">
+    <div class="row">
+    <input type="hidden" name="q" value="save">
+    <input type="hidden" name="id" value="{{ id_fact }}">
+
+    <div class="col-xs-4">
+        <div class="form-group">
+          <label>Artist</label>
+          <select class="form-control" name="artist" required>
+            <option disabled>Choose the Artist...</option>
+            {% for artist in artists %}
+                {% if id_fact != -1 and artist.0 == fact_to_update.id_artist %}
+                    <option selected value="{{ artist.0 }}">{{ artist.1 }}</option>
+                {% else %}
+                    <option value="{{ artist.0 }}">{{ artist.1 }}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+          <label>Album</label>
+          <select class="form-control" name="album" required>
+            <option disabled>Choose the Album...</option>
+            {% for album in albums %}
+                {% if id_fact != -1 and album.0 == fact_to_update.id_album %}
+                    <option selected value="{{ album.0 }}">{{ album.1 }}</option>
+                {% else %}
+                    <option value="{{ album.0 }}">{{ album.1 }}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+          <label>Song</label>
+          <select class="form-control" name="song">
+            <option disabled>Choose the Song...</option>
+            {% for song in songs %}
+                {% if id_fact != -1 and song.0 == fact_to_update.id_song %}
+                    <option selected value="{{ song.0 }}">{{ song.1 }}</option>
+                {% else %}
+                    <option value="{{ song.0 }}">{{ song.1 }}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label>Date of the Song Release</label>
+      <div class="row">
+      <div class="col-xs-2">
+        <select class="form-control" name="day">
+          <option disabled>Day</option>
+          {% for i in dayrange %}
+            {% if id_fact != -1 and i == fact_to_update.date_release.day %}
+                <option selected value="{{ i }}">{{ i }}</option>
+            {% else %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-xs-2">
+        <select class="form-control" name="month">
+          <option disabled>Month</option>
+          {% for i in monthrange %}
+            {% if id_fact != -1 and i == fact_to_update.date_release.month %}
+                <option selected value="{{ i }}">{{ i }}</option>
+            {% else %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-xs-2">
+        <select class="form-control" name="year">
+          <option disabled>Year</option>
+          {% for i in yearrange %}
+            {% if id_fact != -1 and i == fact_to_update.date_release.year %}
+                <option selected value="{{ i }}">{{ i }}</option>
+            {% else %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      </div>
+    </div>
+
+    <input type="submit" class="btn btn-success" value='Save Fact' />
+  </form>
+
+  <div class="text-center" >
+    <a href="/bands">Back</a>
+  </div>
+  </div>
+{% endblock %}

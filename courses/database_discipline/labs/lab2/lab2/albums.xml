@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<albums>
+  <album>
+      <name>The Black Album</name>
+      <format>Studio</format>
+      <number_of_tracks>11</number_of_tracks>
+  </album>
+  <album>
+      <name>Spectrum</name>
+      <format>EP</format>
+      <number_of_tracks>4</number_of_tracks>
+  </album>
+  <album>
+      <name>Music as a Weapon</name>
+      <format>Live</format>
+      <number_of_tracks>14</number_of_tracks>
+  </album>
+  <album>
+      <name>Meteora</name>
+      <format>Studio</format>
+      <number_of_tracks>10</number_of_tracks>
+  </album>
+</albums>

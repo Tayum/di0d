@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<artists>
+  <artist>
+      <name>Metallica</name>
+      <number_of_members>4</number_of_members>
+      <description>Metallica is an American heavy metal band based in San Rafael, California. The band was formed in 1981 in Los Angeles when vocalist and guitarist James Hetfield responded to an advertisement posted by drummer Lars Ulrich in a local newspaper. Metallica current lineup comprises founding members Hetfield and Ulrich, longtime lead guitarist Kirk Hammett, and bassist Robert Trujillo. Guitarist Dave Mustaine (who went on to form Megadeth) and bassists Ron McGovney, Cliff Burton, and Jason Newsted are also former members of the band.</description>
+  </artist>
+  <artist>
+      <name>Muzzy</name>
+      <number_of_members>1</number_of_members>
+      <description>Mustafa Alobaidi (born November 10, 1994) better known by his stage name Muzzy, is an English Drum and Bass electronic musician. He first gained attention with his release on UKF, X No Way Out in 2010 and continues to release original music.</description>
+  </artist>
+  <artist>
+      <name>Disturbed</name>
+      <number_of_members>4</number_of_members>
+      <description>Disturbed is an heavy metal band from Homer Glen, Illinois, formed in 1996. The band includes vocalist David Draiman, bassist John Moyer, guitarist Dan Donegan, and drummer Mike Wengren. Former band members are bassist Steve Kmak and vocalist Erich Awalt. The band has released six studio albums, five of which have consecutively debuted at number one on the Billboard 200. Disturbed went into hiatus in October 2011, during which the band members focused on various side projects, and returned in June 2015, releasing their first album in four years, Immortalized, on August 21, 2015.</description>
+  </artist>
+  <artist>
+      <name>Linkin Park</name>
+      <number_of_members>5</number_of_members>
+      <description>Linkin Park is an American rock band from Agoura Hills, California. Formed in 1996, the band rose to international fame with their debut album Hybrid Theory (2000), which was certified Diamond by the RIAA in 2005 and multi-Platinum in several other countries. Their following studio album Meteora continued the band success, topping the Billboard 200 album chart in 2003, and was followed by extensive touring and charity work.</description>
+  </artist>
+</artists>
