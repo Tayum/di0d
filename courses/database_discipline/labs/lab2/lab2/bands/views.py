@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse
 from django.contrib import messages
 import datetime
 
@@ -29,12 +30,11 @@ def index(request):
         if request.POST.get("q", "") == "load":
             db_management.load_data()
             messages.success(request, "The data was successfully loaded into the database.")
-            return render(request, 'bands/facts.html', {
-                          'facts': db_management.read_facts()
-            })
+            return HttpResponseRedirect(reverse('bands:facts'))
 
 
 def facts(request):
+    # request.method == "POST"
     if request.method == "POST":
         if request.POST.get("q", "") == "delete":
             id = request.POST.get("id", "")
@@ -62,9 +62,12 @@ def facts(request):
                                           request.POST.get("day", ""))
                 messages.success(request, "The existing fact with <" + id + "> ID was successfully updated.")
 
-    return render(request, 'bands/facts.html', {
-        'facts': db_management.read_facts()
-    })
+        return HttpResponseRedirect(reverse('bands:facts'))
+    # request.method != "POST" (i. e. "GET")
+    else:
+        return render(request, 'bands/facts.html', {
+            'facts': db_management.read_facts()
+        })
 
 
 def savefact(request):
