@@ -1,0 +1,14 @@
+{% extends "bands/base.html" %}
+{% load static %}
+
+{% block headblock %}
+  <title>Home</title>
+  <meta name="description" content="Bands App">
+  <meta name="author" content="Sergei Romaniuk">
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+  <img class="img-responsive center-block" alt='logo' src="{% static 'bands/images/index.jpg' %}" />
+  </div>
+{% endblock %}

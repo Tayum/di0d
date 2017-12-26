@@ -1,0 +1,107 @@
+{% extends "bands/base.html" %}
+{% load static %}
+
+{% block headblock %}
+  <title>Albums</title>
+  <link rel="stylesheet" href="{% static 'bands/stylesheets/search.css' %}" type="text/css" />
+  <!-- jQuery library -->
+  <script src="{% static 'bands/js/jquery-3.2.1.js' %}"></script>
+  <!-- Latest compiled Bootstrap JavaScript -->
+  <script src="{% static 'bands/js/bootstrap.js' %}"></script>
+  <!-- MustacheJS -->
+  <script src="{% static 'bands/js/mustache.js' %}"></script>
+  <!-- Search (Albums) -->
+  <script src="{% static 'bands/js/search_albums.js' %}?version=1.1"></script>
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+  <!-- Search field -->
+  <nav class="navbar">
+    <div class="text-center">
+        <form id="id_search_form" class="navbar-form" role="search">
+            <div class="input-group">
+                <input type="hidden" id="id_search_mode" name="search_mode" value="10">
+
+                <select class="form-control" id="id_search_query_type" name="search_query_type" required>
+                   <option disabled>Choose format of album...</option>
+                   {% for format in formats %}
+                      <option value="{{ format }}">{{ format }}</option>
+                   {% endfor %}
+                </select>
+
+                <div class="input-group-btn">
+                  <input type="submit" class="btn btn-search btn-default" value="Search">
+                </div>
+            </div>
+        </form>
+    </div>
+  </nav>
+
+  <br>
+
+  <div id="search_result">
+    <div class="panel panel-default">
+    <div class="panel-heading"><b>Albums</b></div>
+    <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Format</th>
+          <th>Number of tracks</th>
+      </tr>
+      </thead>
+          </tbody>
+            {% for album in albums.rows %}
+                <tr>
+                    {% for field in album %}
+                        <td>{{ field }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+          </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  {% verbatim %}
+  <script id="search_script" type="x-tmpl-mustache">
+      <div id="search_result">
+        <div class="panel panel-default">
+        <div class="panel-heading"><b>Albums</b></div>
+        {{ ^empty }}
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Format</th>
+                  <th>Number of tracks</th>
+              </tr>
+              </thead>
+              </tbody>
+                {{#albums}}
+                  <tr>
+                    <td>{{ 0 }}</td>
+                    <td>{{ 1 }}</td>
+                    <td>{{ 2 }}</td>
+                    <td>{{ 3 }}</td>
+                  </tr>
+                {{/albums}}
+              </tbody>
+            </table>
+            </div>
+        {{ /empty }}
+        {{ #empty }}
+            <div class="panel-body"><b>There are no albums with such value of 'Format' field.</b></div>
+        {{ /empty }}
+        </div>
+      </div>
+  </script>
+  {% endverbatim %}
+{% endblock %}

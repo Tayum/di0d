@@ -1,0 +1,112 @@
+{% extends "bands/base.html" %}
+{% load static %}
+
+{% block headblock %}
+  <title>Artists</title>
+  <link rel="stylesheet" href="{% static 'bands/stylesheets/search.css' %}" type="text/css" />
+  <!-- jQuery library -->
+  <script src="{% static 'bands/js/jquery-3.2.1.js' %}"></script>
+  <!-- Latest compiled Bootstrap JavaScript -->
+  <script src="{% static 'bands/js/bootstrap.js' %}"></script>
+  <!-- MustacheJS -->
+  <script src="{% static 'bands/js/mustache.js' %}"></script>
+  <!-- Search (Artists) -->
+  <script src="{% static 'bands/js/search_artists.js' %}?version=1.1"></script>
+{% endblock %}
+
+{% block bodyblock %}
+  <div class="container">
+  <!-- Search field -->
+  <nav class="navbar">
+    <div class="text-center">
+        <form id="id_search_form" class="navbar-form" role="search">
+            <div class="input-group">
+                <div class="input-group-btn">
+                  <select class="form-control" id="id_search_mode" name="search_mode" required>
+                    <option disabled>Choose search mode...</option>
+                    <option selected value="0">Whole Phrase</option>
+                    <option value="1">Mandatory Occurrence</option>
+                  </select>
+                </div>
+
+                <input style="width:350px" id="id_search_query" name="search_query" type="text" class="form-control" placeholder="Search by description..." required>
+
+                <div class="input-group-btn">
+                  <input type="submit" class="btn btn-search btn-default" value="Search">
+                </div>
+            </div>
+        </form>
+    </div>
+  </nav>
+
+  <br>
+
+  <div id="search_result">
+    <div class="panel panel-default">
+    <div class="panel-heading"><b>Artists</b></div>
+    {% if artists.rows %}
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+          <tr>
+              <th style="width:80px">ID</th>
+              <th style="width:160px">Name</th>
+              <th style="width:80px">Members</th>
+              <th>Description</th>
+          </tr>
+          </thead>
+          </tbody>
+            {% for artist in artists.rows %}
+                <tr>
+                    {% for field in artist %}
+                        <td>{{ field }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
+    {% else %}
+        <div class="panel-body"><b>There are no artists in database.</b></div>
+    {% endif %}
+    </div>
+    </div>
+  </div>
+
+  {% verbatim %}
+  <script id="search_script" type="x-tmpl-mustache">
+      <div id="search_result">
+        <div class="panel panel-default">
+        <div class="panel-heading"><b>Artists</b></div>
+        {{ ^empty }}
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                  <th style="width:80px">ID</th>
+                  <th style="width:160px">Name</th>
+                  <th style="width:80px">Members</th>
+                  <th>Description</th>
+              </tr>
+              </thead>
+              </tbody>
+                {{#artists}}
+                  <tr>
+                    <td>{{ 0 }}</td>
+                    <td>{{ 1 }}</td>
+                    <td>{{ 2 }}</td>
+                    <td>{{ 3 }}</td>
+                  </tr>
+                {{/artists}}
+              </tbody>
+            </table>
+            </div>
+        {{ /empty }}
+        {{ #empty }}
+            <div class="panel-body"><b>There are no artists with the 'Description' field that suits the search options.</b></div>
+        {{ /empty }}
+        </div>
+      </div>
+  </script>
+  {% endverbatim %}
+{% endblock %}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<songs>
+  <song>
+      <name>Nothing Else Matters</name>
+      <number_in_album>8</number_in_album>
+  </song>
+  <song>
+      <name>Break Away</name>
+      <number_in_album>3</number_in_album>
+  </song>
+  <song>
+      <name>Dehumanized</name>
+      <number_in_album>4</number_in_album>
+  </song>
+  <song>
+      <name>Numb</name>
+      <number_in_album>13</number_in_album>
+  </song>
+</songs>
