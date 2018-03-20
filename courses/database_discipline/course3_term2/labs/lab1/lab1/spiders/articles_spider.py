@@ -1,6 +1,5 @@
 import scrapy
 from scrapy.spiders import CrawlSpider
-from scrapy.contrib.linkextractors import LinkExtractor
 
 
 class ArticlesSpider(CrawlSpider):
@@ -17,6 +16,7 @@ class ArticlesSpider(CrawlSpider):
                 'fragments': text.xpath(".//p/text()").extract(),
                 'images': text.xpath(".//img/@src").extract(),
             }
+
         for a in response.xpath("//div[@id='newsListItemsHolder']")\
                 .xpath(".//a[@class='newsListItemTextTitle']"):
             yield response.follow(a, callback=self.parse)

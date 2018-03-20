@@ -1,6 +1,5 @@
 import scrapy
 from scrapy.spiders import CrawlSpider
-from scrapy.contrib.linkextractors import LinkExtractor
 
 
 class ProductsSpider(CrawlSpider):
@@ -18,9 +17,14 @@ class ProductsSpider(CrawlSpider):
                 'price_to': product.css('div.list-big-price a span::text').extract()[1],
                 'img': response.urljoin(product.css('div.pictb.h img::attr(src)').extract_first()),
             }
+
         next_page = response.css('div.pager a[id="pager_next"]::attr(href)').extract_first()
-        # a block to parse only 2 pages
+
         if next_page is not None and int(next_page[10]) < 2:
+            # second statement is a "workaround"
+            # in order to parse only 2 pages
+            # at [10] index there is a page number
+            # FIXME
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
 

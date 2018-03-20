@@ -6,8 +6,3 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-
-
-class WorldItem(scrapy.Item):
-    paragraph = scrapy.Field()
-    image = scrapy.Field()

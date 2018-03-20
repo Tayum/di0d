@@ -1,14 +1,14 @@
+from lxml import etree
 import os
 # from scrapy import cmdline
 import subprocess
-from lxml import etree
-from twisted.persisted.aot import prettify
 
 
 def articles_parse():
     try:
         os.remove("articles.xml")
     except OSError:
+        print("OS Error occurred while trying to delete articles.xml")
         pass
 
     # cmdline.execute("scrapy crawl articles -o articles.xml -t xml".split())
@@ -36,6 +36,7 @@ def products_parse():
     try:
         os.remove("products.xml")
     except OSError:
+        print("OS Error occurred while trying to delete products.xml")
         pass
 
     # cmdline.execute("scrapy crawl products -o products.xml -t xml".split())
@@ -52,7 +53,7 @@ def xml_to_xhtml():
     try:
         os.remove("products.html")
     except OSError:
-        print("OS Error occured")
+        print("OS Error occurred while trying to delete products.html")
         pass
     result.write_output("products.html")
 
