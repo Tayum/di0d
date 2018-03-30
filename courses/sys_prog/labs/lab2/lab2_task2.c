@@ -6,11 +6,11 @@
 #include <string.h>
 #include <time.h>
 
-void parentProcess(ssize_t * fd);
-void childProcess(ssize_t * fd);
+void parentProcess(int * fd);
+void childProcess();
 
 int main(void) {
-    ssize_t fd;
+    int fd;
     ssize_t bytes_output;
     pid_t fork_id;
 
@@ -30,7 +30,7 @@ int main(void) {
         close(fd);
     }
     else if (fork_id == 0) {
-        childProcess(&fd);
+        childProcess();
     }
     else {
         // fork_id > 0 - it's child's ID
@@ -40,56 +40,58 @@ int main(void) {
     return 0;
 }
 
-void parentProcess(ssize_t * fd) {
+void parentProcess(int * fd) {
     write((* fd), "The child has been created, exiting now...\n",
     strlen("The child has been created, exiting now...\n"));
     exit(EXIT_SUCCESS);
 }
 
-void childProcess(ssize_t * fd) {
+void childProcess() {
     pid_t newSid;
     char buff[100];
     int buff_length;
     int pid;
-    
+    int i;
+    int fd;
+
     // setsid()
     newSid = setsid();
     if (newSid == -1) {
-        write((* fd), "Error while calling setsid()\n",
-        strlen("Error while calling setsid()\n"));
+        printf("Error while calling setsid()\n");
     }
     // newSid contains current sid of the process, can be used if necessary
 
     // change directory
     if(chdir("/") == -1) {
-        write((* fd), "Error while trying to chdir()\n",
-        strlen("Error while trying to chdir()\n"));
+        printf("Error while calling setsid()\n");
     }
 
-    // closes fd from parent
-    close(* fd);
+    // closes all fds from parent (including stdin - 0, stdout - 1, stderr - 2)
+    for(i = 0; i < 255; i++) {
+        close(i);
+    }
 
-    // open /dev/null for writing on stdin/stdout/stderr
-    // stdin = (FILE *)open("/dev/null", O_WRONLY | O_CREAT, 0644);
-    // stdout = (FILE *)open("/dev/null", O_WRONLY | O_CREAT, 0644);
-    // stderr = (FILE *)open("/dev/null", O_WRONLY | O_CREAT, 0644);
+    open("/dev/null",O_RDWR); // open /dev/null for stdin
+    dup(0); // open /dev/null for stdout
+    dup(0); // open /dev/null for stderr
 
     // Open test.log and write there child's parameters
     buff_length = sprintf(buff, "PID: %d, GID: %d, SID: %d\n", getpid(), getgid(), newSid);
-    (* fd) = open("/home/tayum/SysProg/test.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
-    if ((* fd) == -1) {
+    fd = open("/home/tayum/SysProg/test.log", O_WRONLY | O_CREAT | O_APPEND, 0644);
+    if (fd == -1) {
       printf("Error while opening test.log for writing (from daemon)\n");
       return;
     }
-    write((* fd), &buff, buff_length);
-    close(* fd); // comment out
-
+    write(fd, &buff, buff_length);
+    close(fd);
+    
     // infinite cycle
     while(1) {
         time_t cur = time(NULL);
-        // char * stime = ctime(&cur); // uncomment
-        // write((* fd), stime, strlen(stime)); // uncomment
-        printf("PID: %d, Current time is: %s", getpid(), ctime(&cur));
+        char * stime = ctime(&cur);
+        // buff_length = sprintf(buff, "PID: %d, Current time is: %s", getpid(), stime);
+        // write(fd, buff, buff_length); // uncomment
+        printf("PID: %d, Current time is: %s", getpid(), stime);
     }
-    // close(* fd); // uncomment
+    // close(fd); // uncomment
 }
