@@ -91,7 +91,7 @@ app:page-sections($node as node(), $model as map(*))
 
 declare
 %templates:default("pageid", 30873244)
-function app:page($node as node(), $model as map(*), $pageid as xs:int?)
+function app:page($node as node(), $model as map(*), $pageid as xs:string?)
 as map(*) {
     let $page :=
         for $p in collection("/db/apps/wiki/data//?select=*.xml")
@@ -109,7 +109,7 @@ as map(*) {
 (: SEARCH.HTML :)
 declare
 %templates:default("q", "")
-function app:search($node as node(), $model as map(*), $q as xs :string?, $mode as xs :string?) {
+function app:search($node as node(), $model as map(*), $q as xs:string?, $mode as xs:string?) {
     if($q = "") then (
         <div/>
     )
@@ -161,7 +161,7 @@ function app:search($node as node(), $model as map(*), $q as xs :string?, $mode 
 (: ANALYSIS.HTML :)
 
 declare function app:analysis($node as node(), $model as map(*)) {
-        let $starttime as xs:time := util:system-time()
+    let $starttime as xs:time := util:system-time()
     let $documents := collection("/db/apps/wiki/data//?select=*.xml")
     let $all_sections := $documents//section
     let $all_words := ($all_sections ! tokenize(., '[\s]+'))
