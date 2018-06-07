@@ -6,7 +6,7 @@ How to re-index your collection for full-text search to work:
 1. Create a collection (folder) inside your application: "system\config\db\apps\wiki"
 2. Create a file there: collection.xconf
 3. Fill it with the contents from this repository (check the same path as in 1. and 2. paragraps here)
-4. Re-index the collection itself:
+4. Re-index the collection itself:\
 ![Reindex](./../screenshots/guides/reindex.jpg)
 ---
 "Analysis" function has a very poor design and results in infinite load when you try to call it for all of your .xml documents.
