@@ -14,7 +14,7 @@ self.base_url = "https://secret.net"
 ```
 to link, provided by World Archery.
 
-5. Launch the application with this lines in ```main.py```:
+5. Launch the application with these lines in ```main.py```:
 ```
 fdb = FillDB()
 fdb.fill_archers_collection()
@@ -24,7 +24,7 @@ fdb.fill_qualifications_arrows_collection()
 ```
 and wait for the application to gather information into database.
 
-6. Re-Launch the application with this lines in ```main.py```:
+6. Relaunch the application with these lines in ```main.py```:
 ```
 menu = Menu()
 menu.init_menu()
