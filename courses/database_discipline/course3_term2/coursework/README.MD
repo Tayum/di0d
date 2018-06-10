@@ -23,6 +23,7 @@ fdb.fill_qualifications_collection()
 fdb.fill_qualifications_arrows_collection()
 ```
 and wait for the application to gather information into database.
+
 6. Re-Launch the application with this lines in ```main.py```:
 ```
 menu = Menu()
