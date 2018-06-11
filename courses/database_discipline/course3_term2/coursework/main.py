@@ -98,14 +98,14 @@ class Menu:
         max_scores = mm.get_maximum_individual_qualification_score()
         male = max_scores['male']
         female = max_scores['female']
-        print("Male score (by {0}, (Age: {1}, from {2}) within {3}): {4}".format(
+        print("Male score (by {0} (Age: {1}, representing {2}) within {3}): {4}".format(
             male['archer_ids']['name'],
             male['archer_ids']['age'],
             male['archer_ids']['country'],
             male['competition_id']['name'],
             male['score'],
         ))
-        print("Female score (by {0}, {1}, {2} within {3}): {4}".format(
+        print("Female score (by {0} (Age: {1}, representing {2}) within {3}): {4}".format(
             female['archer_ids']['name'],
             female['archer_ids']['age'],
             female['archer_ids']['country'],
