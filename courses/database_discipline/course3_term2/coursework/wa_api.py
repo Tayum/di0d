@@ -99,8 +99,8 @@ class WA_API:
     def get_scores_by_competition(self, competition_id, sex=None):
         """
         :param sex:
-            1 - return only male scores
-            2 - return only female scores
+            "M" - return only male scores
+            "F" - return only female scores
             (others) - return both
 
         Gets individual qualifications results for each athlete that was performing in these competition
